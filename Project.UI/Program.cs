@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Project.BLL.Validations;
 using Project.DAL.Context;
 using Project.ENTITY.Models;
-using Microsoft.AspNetCore.Session;
+using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,13 @@ builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyContext>();
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<MyContext>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddNToastNotifyToastr(new ToastrOptions
+    {
+        PositionClass = ToastPositions.TopRight,
+        TimeOut = 5000,
+    })
+    .AddRazorRuntimeCompilation();
 
 builder.Services.AddMvc(config =>
 {
@@ -47,6 +53,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseNToastNotify();
 
 app.UseStatusCodePagesWithReExecute("/Login/Error/Error404/");
 
