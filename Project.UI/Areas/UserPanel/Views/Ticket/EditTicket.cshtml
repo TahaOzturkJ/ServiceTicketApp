@@ -1,0 +1,115 @@
+﻿@model Project.UI.Areas.UserPanel.Models.ServiceTicketVM
+
+@{
+    ViewData["Title"] = "EditTicket";
+    Layout = "~/Areas/UserPanel/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Servis Bileti Ekleme Paneli</h4>
+            <form class="form-sample" method="post" enctype="multipart/form-data">
+
+                <input asp-for="ServiceTicket.ID" style="display:none;" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.Task">İş Tanımı</label>
+                            <span asp-validation-for="ServiceTicket.Task" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" asp-for="ServiceTicket.Task" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Destek İsteyen Personel</label>
+                            <span asp-validation-for="ServiceTicket.CreatedByID" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <select class="form-control" asp-for="ServiceTicket.CreatedByID" asp-items="ViewBag.OtherUsers">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Açıklama</label>
+                            <span asp-validation-for="ServiceTicket.Description" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" asp-for="ServiceTicket.Description" rows="7" cols="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskPriority">Görev Önceliği</label>
+                                <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <select class="form-control" asp-for="ServiceTicket.TaskPriority" asp-items="@Html.GetEnumSelectList<Project.ENTITY.Enums.Priority>()">
+                                        <option selected="selected" value="">Öncelik</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskStatus">Görev Durumu</label>
+                                <span asp-validation-for="ServiceTicket.TaskStatus" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <select class="form-control" asp-for="ServiceTicket.TaskStatus" asp-items="@Html.GetEnumSelectList<Project.ENTITY.Enums.TaskStatus>()">
+                                        <option selected="selected" value="">Durum</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.PlannedDate">Planlanan Başlama Tarihi</label>
+                                <span asp-validation-for="ServiceTicket.PlannedDate" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" asp-for="ServiceTicket.PlannedDate" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.CompletionDate">Planlanan Bitirilme Tarihi</label>
+                                <span asp-validation-for="ServiceTicket.CompletionDate" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" asp-for="ServiceTicket.CompletionDate" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="UserServiceTicket.UserID">BBS Personeli</label>
+                                <span asp-validation-for="UserServiceTicket.UserID" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <select id="UserIds" name="UserIds" asp-items="ViewBag.BBSUsers" multiple style="width:100%">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn align-middle btn-primary btn-icon-text">
+                                    <i class="mdi mdi-file-check btn-icon-prepend"></i> Düzenle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+
+<script>
+    new MultiSelectTag('UserIds', {
+        placeholder: 'Ara'
+    })  // id
+</script>

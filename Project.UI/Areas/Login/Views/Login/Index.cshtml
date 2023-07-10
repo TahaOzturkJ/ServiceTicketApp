@@ -1,0 +1,55 @@
+﻿@model Project.UI.Areas.Login.Models.UserLoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BBS Yazılım</title>
+    <link rel="stylesheet" href="~/design/template/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/design/template/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/design/template/assets/css/style.css">
+    <link rel="shortcut icon" href="~/design/template/assets/images/favicon.png" />
+</head>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="card col-lg-4 mx-auto">
+                        <div class="card-body px-5 py-5">
+                            <h2 class="card-title mb-3" style="text-align:center">Giriş</h2>
+                            <br />
+                            <form method="post">
+                                <div class="form-group">
+                                    <label>Kullanıcı Adı</label>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <input type="text" class="form-control p_input" id="UserName" name="UserName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifre</label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <input type="password" class="form-control p_input" id="Password" name="Password">
+                                </div>
+                                <br />
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-block enter-btn auth-form-btn">Giriş Yap</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/design/template/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/design/template/assets/js/off-canvas.js"></script>
+    <script src="~/design/template/assets/js/hoverable-collapse.js"></script>
+    <script src="~/design/template/assets/js/misc.js"></script>
+    <script src="~/design/template/assets/js/settings.js"></script>
+    <script src="~/design/template/assets/js/todolist.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿@model Project.UI.Areas.Login.Models.UserRegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BBS Yazılım</title>
+    <link rel="stylesheet" href="~/design/template/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/design/template/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/design/template/assets/css/style.css">
+    <link rel="shortcut icon" href="~/design/template/assets/images/favicon.png" />
+</head>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="card col-lg-4 mx-auto">
+                        <div class="card-body px-5 py-5">
+                            <h3 class="card-title text-left mb-3">Kayıt Ol</h3>
+                            <br />
+                            <form method="post">
+                                <div class="form-group">
+                                    <label>İsim-Soyisim</label>
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                    <input type="text" asp-for="FullName" class="form-control form-control-lg" id="Name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Fotoğraf Yolu</label>
+                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                    <input type="text" asp-for="ImageUrl" class="form-control form-control-lg" id="ImageURL">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kullanıcı Adı</label>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <input type="text" asp-for="UserName" class="form-control form-control-lg" id="UserName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifre</label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <input type="password" asp-for="Password" class="form-control form-control-lg" id="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifreyi Doğrulayın</label>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    <input type="password" asp-for="ConfirmPassword" class="form-control form-control-lg" id="ConfirmPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mail</label>
+                                    <span asp-validation-for="Mail" class="text-danger"></span>
+                                    <input type="email" asp-for="Mail" class="form-control form-control-lg" id="Mail">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şirket</label>
+                                    <span asp-validation-for="CompanyID" class="text-danger"></span>
+                                    <select class="form-control" asp-for="CompanyID" asp-items="ViewBag.Companies">
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <div class="text-danger" asp-validation-summary="ModelOnly">
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-block enter-btn auth-form-btn">Kayıt Ol</button>
+                                </div>
+                                <p class="sign-up text-center">Zaten Hesabınız Var Mı?<a href="/Login/Login/Index"> Giriş Yapın</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/design/template/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/design/template/assets/js/off-canvas.js"></script>
+    <script src="~/design/template/assets/js/hoverable-collapse.js"></script>
+    <script src="~/design/template/assets/js/misc.js"></script>
+    <script src="~/design/template/assets/js/settings.js"></script>
+    <script src="~/design/template/assets/js/todolist.js"></script>
+</body>
+</html>
