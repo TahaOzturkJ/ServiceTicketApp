@@ -1,0 +1,239 @@
+﻿@using Project.ENTITY.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@model List<ServiceTicket>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/CustomerPanel/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row header">
+                        <div class="col-sm-1.5">
+                            <a href="/CustomerPanel/Ticket/Index" class="btn btn-md">
+                                Bana Ait
+                                <span class="badge">@ViewBag.OwnCount</span>
+                            </a>
+                        </div>
+                        <div class="col-sm-1.5 active-header">
+                            <a href="#" class="btn btn-md">
+                                Tamamlanmış
+                                <span class="badge">@ViewBag.DoneCount</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-1.5">
+                            <div class="header-bar">
+                                <a href="#" class="btn btn-sm">
+                                    <img src="~/design/template/assets/images/icons/print.png" />
+                                    Yazdır
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-1.5">
+                            <div class="header-bar">
+                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); deleteAsBatch()">
+                                    <img src="~/design/template/assets/images/icons/trash.png" />
+                                    Sil
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 header-search">
+                            <div class="header-bar">
+                                <img src="~/design/template/assets/images/icons/loupe.png" />
+                                <input type="text" id="searchInput" class="header-search-input" placeholder="Ara" />
+                                <a href="/CustomerPanel/Ticket/AddTicket" class="btn btn-sm btn-success search-append" type="button">
+                                    <span class="menu-icon">
+                                        <i class="mdi mdi-plus"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check form-check-muted m-0">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" id="All" class="form-check-input" onclick="selectAllRows()">
+                                    </label>
+                                </div>
+                            </th>
+                            <th onclick="sortTable(0)">
+                                <div>
+                                    <b>Servis Numarası</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </th>
+                            <th onclick="sortTable(1)">
+                                <div>
+                                    <b>Görev</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                            </th>
+                            <th onclick="sortTable(3)">
+                                <div>
+                                    <b>Planlanan Başlangıç Tarihi</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                            </th>
+                            <th onclick="sortTable(4)">
+                                <div>
+                                    <b>Planlanan Tamamlanma Tarihi</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                            </th>
+                            <th onclick="sortTable(5)">
+                                <div>
+                                    <b>İlerleme Durumu</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </th>
+                            <th onclick="sortTable(6)">
+                                <div>
+                                    <b>Öncelik Durumu</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-check form-check-muted m-0">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" id="checkbox-@item.ID" name="checkboxes" value="@item.ID" class="form-check-input" onclick="changeBackground(this)">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>@item.ID</td>
+                                <td>@item.Task</td>
+                                <td>@item.PlannedDate.ToString("dd MMMM yyyy")</td>
+                                <td>@item.CompletionDate.ToString("dd MMMM yyyy")</td>
+
+                                @if (item.TaskStatus == ENTITY.Enums.TaskStatus.Beklemede)
+                                {
+                                    <td>
+                                        <div class="chips-yellow">
+                                            @item.TaskStatus
+                                        </div>
+                                    </td>
+                                }
+                                else if (item.TaskStatus == ENTITY.Enums.TaskStatus.Planlandı)
+                                {
+                                    <td>
+                                        <div class="chips-orange">
+                                            @item.TaskStatus
+                                        </div>
+                                    </td>
+                                }
+                                else if (item.TaskStatus == ENTITY.Enums.TaskStatus.Sürüyor)
+                                {
+                                    <td>
+                                        <div class="chips-blue">
+                                            @item.TaskStatus
+                                        </div>
+                                    </td>
+                                }
+                                else if (item.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
+                                {
+                                    <td>
+                                        <div class="chips-green">
+                                            @item.TaskStatus
+                                        </div>
+                                    </td>
+                                }
+                                <td>@item.TaskPriority</td>
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <a class="btn text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" href="/CustomerPanel/Ticket/DeleteTicket/@item.ID">Sil</a>
+                                            <a class="dropdown-item" href="/CustomerPanel/Ticket/EditTicket/@item.ID">Güncelle</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

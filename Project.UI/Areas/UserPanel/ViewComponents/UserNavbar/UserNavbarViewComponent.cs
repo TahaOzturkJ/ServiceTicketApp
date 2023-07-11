@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Project.ENTITY.Models;
 using Project.UI.Areas.UserPanel.Models;
 
-namespace Project.UI.Areas.UserPanel.ViewComponents.Navbar
+namespace Project.UI.Areas.UserPanel.ViewComponents.UserNavbar
 {
-    public class Navbar : ViewComponent
+    [ViewComponent]
+    public class UserNavbarViewComponent : ViewComponent
     {
         private readonly UserManager<User> _userManager;
 
-        public Navbar(UserManager<User> userManager)
+        public UserNavbarViewComponent(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

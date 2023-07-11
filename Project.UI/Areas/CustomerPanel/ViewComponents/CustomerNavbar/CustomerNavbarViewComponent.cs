@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Project.ENTITY.Models;
-using Project.UI.Areas.UserPanel.Models;
+using Project.UI.Areas.CustomerPanel.Models;
 
-namespace Project.UI.Areas.UserPanel.ViewComponents.Sidebar
+namespace Project.UI.Areas.CustomerPanel.ViewComponents.CustomerNavbar
 {
-    public class Sidebar : ViewComponent
+    [ViewComponent]
+    public class CustomerNavbarViewComponent : ViewComponent
     {
         private readonly UserManager<User> _userManager;
 
-        public Sidebar(UserManager<User> userManager)
+        public CustomerNavbarViewComponent(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

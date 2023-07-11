@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\CustomerPanel\Data\" />
     <Folder Include="Areas\Login\Data\" />
     <Folder Include="Areas\UserPanel\Data\" />
   </ItemGroup>

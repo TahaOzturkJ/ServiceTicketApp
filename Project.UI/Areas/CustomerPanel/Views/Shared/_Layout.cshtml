@@ -8,7 +8,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>BBS Admin</title>
+    <title>BBS Customer</title>
 
     <!-- plugins:css -->
     <link rel="stylesheet" href="~/design/template/assets/vendors/mdi/css/materialdesignicons.min.css">
@@ -31,14 +31,14 @@
     <div class="container-scroller">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <a class="sidebar-brand brand-logo" href="/UserPanel/Dashboard/Index"><img src="~/design/template/assets/images/cavologo.svg" alt="logo" /></a>
+                <a class="sidebar-brand brand-logo" href="/CustomerPanel/Dashboard/Index"><img src="~/design/template/assets/images/cavologo.svg" alt="logo" /></a>
                 <a class="sidebar-brand brand-logo-mini" style="padding-left:1.77rem" href="#"><img src="~/design/template/assets/images/cavominisvg.svg" alt="logo" /></a>
             </div>
-            @await Component.InvokeAsync("UserSidebar")
+            @await Component.InvokeAsync("CustomerSidebar")
 
         </nav>
         <div class="container-fluid page-body-wrapper">
-            @await Component.InvokeAsync("UserNavbar")
+            @await Component.InvokeAsync("CustomerNavbar")
             <div class="main-panel">
                 <div class="content-wrapper-panel">
                     @RenderBody()

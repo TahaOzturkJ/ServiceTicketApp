@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
 using Project.ENTITY.Models;
 using Project.UI.Areas.Login.Models;
+using System.Data;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 namespace Project.UI.Areas.Login.Controllers
 {
@@ -37,10 +39,22 @@ namespace Project.UI.Areas.Login.Controllers
                 var result = await _signInManager.PasswordSignInAsync(ulvm.UserName, ulvm.Password, true, true);
                 if (result.Succeeded)
                 {
-                    var values = _uRep.Where(x => x.UserName == ulvm.UserName).ToArray();
+                    var user = _uRep.Where(x => x.UserName == ulvm.UserName).FirstOrDefault();
 
+                    var userId = user.Id;
 
-                    return RedirectToAction("Index", "Dashboard", new {area = "UserPanel"});
+                    var userManager = HttpContext.RequestServices.GetService<UserManager<User>>();
+                    var currentuser = await userManager.FindByIdAsync(userId.ToString());
+                    var userRoles = await userManager.GetRolesAsync(currentuser);
+
+                    if (userRoles.Any(x=> x == "SuperAdmin" || x == "Admin"))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "UserPanel" });
+                    }
+                    else if (userRoles.Any(x=> x == "Member"))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "CustomerPanel" });
+                    }
                 }
                 else
                 {

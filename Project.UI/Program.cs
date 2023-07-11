@@ -7,6 +7,10 @@ using Project.BLL.Validations;
 using Project.DAL.Context;
 using Project.ENTITY.Models;
 using NToastNotify;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +37,6 @@ builder.Services.AddMvc(config =>
 builder.Services.AddMvc();
 
 builder.Services.AddScoped<IValidator<ServiceTicket>, ServiceTicketValidator>();
-
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project.ENTITY.Models
 {
-    public class Role : IdentityRole<int>
+    public class UserRole : IdentityUserRole<int>
     {
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
