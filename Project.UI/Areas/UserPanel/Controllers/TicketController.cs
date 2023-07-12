@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using NToastNotify;
+using NuGet.Protocol.Plugins;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
+using Project.BLL.EmailSender.Email;
+using Project.BLL.EmailSender.IEmail;
 using Project.BLL.Validations;
 using Project.ENTITY.Models;
 using Project.UI.Areas.UserPanel.Models;
@@ -24,6 +27,13 @@ namespace Project.UI.Areas.UserPanel.Controllers
     [Area("UserPanel")]
     public class TicketController : Controller
     {
+        private readonly IEmailSender _emailSender;
+
+        public TicketController(IEmailSender emailSender)
+        {
+           _emailSender = emailSender;
+        }
+
         ServiceTicketRepository _stRep = new ServiceTicketRepository();
         UserServiceTicketRepository _ustRep = new UserServiceTicketRepository();
         UserRepository _uRep = new UserRepository();
@@ -54,18 +64,56 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 ViewBag.UserData[item.ID] = userData;
             }
 
-            var ownserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
-            var doneserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
+            var ownserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var doneserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var availableserviceTickets = data.Where(st => st.UserServiceTickets == null && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
 
             ViewBag.OwnCount = ownserviceTickets.Count;
             ViewBag.DoneCount = doneserviceTickets.Count;
-
+            ViewBag.AvailableCount = availableserviceTickets.Count;
 
             return View(data);
+        }
+
+        public IActionResult IndexAvailable()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewBag.Users = _uRep.GetActives();
+            var data = _stRep.GetAllActiveRelated();
+
+            ViewBag.AllCount = data.Count;
+
+            ViewBag.UserData = new Dictionary<int, List<User>>();
+
+            foreach (var item in data)
+            {
+                var UserServiceTickets = _ustRep.GetActives().Where(x => data.Select(d => item.ID).Contains(x.ServiceTicketID)).ToList();
+
+                List<User> userData = new List<User>();
+
+                foreach (var ust in UserServiceTickets)
+                {
+                    var matchingUsers = _uRep.GetActives().Where(x => x.Id == ust.UserID);
+                    userData.AddRange(matchingUsers);
+                }
+
+                ViewBag.UserData[item.ID] = userData;
+            }
+
+            var ownserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var doneserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var availableserviceTickets = data.Where(st => st.UserServiceTickets == null && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            ViewBag.OwnCount = ownserviceTickets.Count;
+            ViewBag.DoneCount = doneserviceTickets.Count;
+            ViewBag.AvailableCount = availableserviceTickets.Count;
+
+            return View(availableserviceTickets);
         }
 
         public IActionResult IndexOwn()
@@ -73,17 +121,20 @@ namespace Project.UI.Areas.UserPanel.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             ViewBag.Users = _uRep.GetActives();
+
             var data = _stRep.GetAllActiveRelated();
-            var ownserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
-            var doneserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
 
             ViewBag.AllCount = data.Count;
+
+            var ownserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var doneserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var availableserviceTickets = data.Where(st => st.UserServiceTickets == null && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
             ViewBag.OwnCount = ownserviceTickets.Count;
             ViewBag.DoneCount = doneserviceTickets.Count;
+            ViewBag.AvailableCount = availableserviceTickets.Count;
 
             ViewBag.UserData = new Dictionary<int, List<User>>();
 
@@ -111,17 +162,19 @@ namespace Project.UI.Areas.UserPanel.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             ViewBag.Users = _uRep.GetActives();
+
             var data = _stRep.GetAllActiveRelated();
-            var ownserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
-            var doneserviceTickets = _stRep.GetAllActiveRelated()
-            .Where(st => st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
-            .ToList();
+
+            var ownserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var doneserviceTickets = data.Where(st => st.UserServiceTickets != null && st.UserServiceTickets.Any(ust => ust.UserID == Convert.ToInt32(userId)) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
+
+            var availableserviceTickets = data.Where(st => st.UserServiceTickets == null && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı).ToList();
 
             ViewBag.AllCount = data.Count;
             ViewBag.OwnCount = ownserviceTickets.Count;
             ViewBag.DoneCount = doneserviceTickets.Count;
+            ViewBag.AvailableCount = availableserviceTickets.Count;
 
             ViewBag.UserData = new Dictionary<int, List<User>>();
 
@@ -164,7 +217,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices]IToastNotification toast)
+        public async Task<IActionResult> AddTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast)
         {
             var BBSUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID == 1), "Id", "FullName");
             var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
@@ -181,7 +234,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
             int count = 0;
 
-            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket);
+            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
 
             if (!validationResult.IsValid)
             {
@@ -275,45 +328,54 @@ namespace Project.UI.Areas.UserPanel.Controllers
         [HttpPost]
         public async Task<IActionResult> EditTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast)
         {
-            var UserServiceTickets = _ustRep.GetActives().Where(x => x.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
-
-            List<User> userData = new List<User>();
-
-            foreach (var ust in UserServiceTickets)
+            if (DateTime.Now > stVM.ServiceTicket.StartDate && DateTime.Now < stVM.ServiceTicket.CompletionDate)
             {
-                var matchingUsers = _uRep.GetActives().Where(x => x.Id == ust.UserID);
-                userData.AddRange(matchingUsers);
+                stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Sürüyor;
+            }
+            else
+            {
+                stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Planlandı;
             }
 
-            var BBSUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID == 1), "Id", "FullName");
-
-            foreach (var item in BBSUsers)
-            {
-                var itemId = int.Parse(item.Value);
-
-                if (userData.Any(u => u.Id == itemId))
-                {
-                    item.Selected = true;
-                }
-            }
-
-            var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
-
-
-            if (BBSUsers != null)
-            {
-                ViewBag.BBSUsers = BBSUsers;
-            }
-
-            if (OtherUsers != null)
-            {
-                ViewBag.OtherUsers = OtherUsers;
-            }
-
-            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket);
+            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
 
             if (!validationResult.IsValid)
             {
+
+                var UserServiceTickets = _ustRep.GetActives().Where(x => x.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
+
+                List<User> userData = new List<User>();
+
+                foreach (var ust in UserServiceTickets)
+                {
+                    var matchingUsers = _uRep.GetActives().Where(x => x.Id == ust.UserID);
+                    userData.AddRange(matchingUsers);
+                }
+
+                var BBSUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID == 1), "Id", "FullName");
+
+                foreach (var item in BBSUsers)
+                {
+                    var itemId = int.Parse(item.Value);
+
+                    if (userData.Any(u => u.Id == itemId))
+                    {
+                        item.Selected = true;
+                    }
+                }
+
+                var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
+
+
+                if (BBSUsers != null)
+                {
+                    ViewBag.BBSUsers = BBSUsers;
+                }
+
+                if (OtherUsers != null)
+                {
+                    ViewBag.OtherUsers = OtherUsers;
+                }
 
                 foreach (ValidationFailure failure in validationResult.Errors)
                 {
@@ -326,9 +388,6 @@ namespace Project.UI.Areas.UserPanel.Controllers
             }
             else
             {
-                _stRep.Update(stVM.ServiceTicket);
-                toast.AddInfoToastMessage("Destek bileti güncellendi.", new ToastrOptions { Title = "Başarılı!" });
-
                 var existingUserServiceTickets = _ustRep.GetActives().Where(x => x.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
                 var selectedUserIds = stVM.UserIds != null ? new HashSet<int>(stVM.UserIds) : new HashSet<int>();
 
@@ -339,6 +398,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
                         if (!selectedUserIds.Contains(userServiceTicket.UserID))
                         {
                             _ustRep.Destroy(userServiceTicket);
+                            stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Beklemede;
                         }
                     }
                 }
@@ -361,11 +421,22 @@ namespace Project.UI.Areas.UserPanel.Controllers
                     _ustRep.Add(newUserServiceTicket);
                 }
 
+                if (selectedUserIds.Count == 0)
+                {
+                    stVM.ServiceTicket.StartDate = null;
+                    stVM.ServiceTicket.CompletionDate = null;
+                    stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Beklemede;
+                }
+
+                _stRep.Update(stVM.ServiceTicket);
+
+                toast.AddInfoToastMessage("Destek bileti güncellendi.", new ToastrOptions { Title = "Başarılı!" });
+
                 return RedirectToAction("Index");
             }
         }
 
-        public IActionResult MarkAsCompleted(List<string> checkboxes, [FromServices] IToastNotification toast)
+        public async Task<IActionResult> MarkAsCompleted(List<string> checkboxes, [FromServices] IToastNotification toast)
         {
             if (checkboxes != null && checkboxes.Any())
             {
@@ -373,7 +444,18 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 {
                     var item = _stRep.Find(Convert.ToInt32(id));
                     item.TaskStatus = ENTITY.Enums.TaskStatus.Tamamlandı;
+                    item.CompletionDate = DateTime.Now;
                     _stRep.Update(item);
+
+                    var person = _uRep.Find(Convert.ToInt32(item.CreatedByID));
+
+                    var receiver = person.Email;
+
+                    var subject = "Oluşturmuş olduğunuz "+item.ID+" numaralı "+item.Task+" İsimli Servis Bileti Hakkında";
+
+                    var message = "Belirtmiş olduğunuz " + item.Description + " açıklamalı sorun çözülmüştür.";
+
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
                 }
                 toast.AddSuccessToastMessage("Destek bileti tamamlandı olarak güncellendi.", new ToastrOptions { Title = "Başarılı!" });
             }
@@ -406,7 +488,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Print(List<string> checkboxes,string html, [FromServices] IToastNotification toast)
+        public IActionResult Print(List<string> checkboxes, string html, [FromServices] IToastNotification toast)
         {
             html = html.Replace("StrTag", "<").Replace("EndTag", ">");
 

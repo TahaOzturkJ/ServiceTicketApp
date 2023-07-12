@@ -1,4 +1,4 @@
-﻿@model Project.UI.Areas.Login.Models.UserLoginViewModel
+﻿@model Project.UI.Areas.Auth.Models.UserLoginViewModel
 @{
     Layout = null;
 }
@@ -37,6 +37,11 @@
                                 <br />
                                 <div class="text-center">
                                     <button class="btn btn-primary btn-block enter-btn auth-form-btn">Giriş Yap</button>
+                                </div>
+                                <div class="form-group">
+                                    <p class="sign-up text-center">Hesabınız yok mu?<a href="/Auth/Register/Index">Kayıt Olun</a></p>
+                                </div>
+                                <div class="text-danger" asp-validation-summary="ModelOnly">
                                 </div>
                             </form>
                         </div>

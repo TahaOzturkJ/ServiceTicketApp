@@ -1,4 +1,4 @@
-﻿@model Project.UI.Areas.Login.Models.UserRegisterViewModel
+﻿@model Project.UI.Areas.Auth.Models.UserRegisterViewModel
 @{
     Layout = null;
 }
@@ -23,16 +23,16 @@
                         <div class="card-body px-5 py-5">
                             <h3 class="card-title text-left mb-3">Kayıt Ol</h3>
                             <br />
-                            <form method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label>İsim-Soyisim</label>
                                     <span asp-validation-for="FullName" class="text-danger"></span>
                                     <input type="text" asp-for="FullName" class="form-control form-control-lg" id="Name">
                                 </div>
                                 <div class="form-group">
-                                    <label>Fotoğraf Yolu</label>
-                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                                    <input type="text" asp-for="ImageUrl" class="form-control form-control-lg" id="ImageURL">
+                                    <label>Fotoğraf</label>
+                                    <span asp-validation-for="Image" class="text-danger"></span>
+                                    <input type="file" asp-for="Image" class="form-control-file">
                                 </div>
                                 <div class="form-group">
                                     <label>Kullanıcı Adı</label>
@@ -54,19 +54,12 @@
                                     <span asp-validation-for="Mail" class="text-danger"></span>
                                     <input type="email" asp-for="Mail" class="form-control form-control-lg" id="Mail">
                                 </div>
-                                <div class="form-group">
-                                    <label>Şirket</label>
-                                    <span asp-validation-for="CompanyID" class="text-danger"></span>
-                                    <select class="form-control" asp-for="CompanyID" asp-items="ViewBag.Companies">
-                                        <option></option>
-                                    </select>
-                                </div>
-                                <div class="text-danger" asp-validation-summary="ModelOnly">
-                                </div>
                                 <div class="text-center">
                                     <button class="btn btn-primary btn-block enter-btn auth-form-btn">Kayıt Ol</button>
                                 </div>
-                                <p class="sign-up text-center">Zaten Hesabınız Var Mı?<a href="/Login/Login/Index"> Giriş Yapın</a></p>
+                                <div class="text-danger" asp-validation-summary="ModelOnly">
+                                </div>
+                                <p class="sign-up text-center">Zaten Hesabınız Var Mı?<a href="/Auth/Login/Index"> Giriş Yapın</a></p>
                             </form>
                         </div>
                     </div>

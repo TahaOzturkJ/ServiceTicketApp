@@ -10074,9 +10074,10 @@ input[type="button"].btn-block {
 
 .btn-group, .fc .fc-button-group,
 .btn-group-vertical {
-  position: relative;
-  display: inline-flex;
-  vertical-align: middle; }
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+}
   .btn-group > .btn, .fc .fc-button-group > .btn, .fc .btn-group > button, .fc .fc-button-group > button, .ajax-upload-dragdrop .btn-group > .ajax-file-upload, .fc .ajax-upload-dragdrop .fc-button-group > .ajax-file-upload, .ajax-upload-dragdrop .fc .fc-button-group > .ajax-file-upload, .swal2-modal .swal2-buttonswrapper .btn-group > .swal2-styled, .fc .swal2-modal .swal2-buttonswrapper .fc-button-group > .swal2-styled, .swal2-modal .swal2-buttonswrapper .fc .fc-button-group > .swal2-styled, .wizard > .actions .btn-group > a, .fc .wizard > .actions .fc-button-group > a, .wizard > .actions .fc .fc-button-group > a,
   .btn-group-vertical > .btn,
   .fc .btn-group-vertical > button,
@@ -11227,8 +11228,20 @@ input[type="button"].btn-block {
     border-top-left-radius: 0;
     border-top-right-radius: 0; }
 
+.nav-item > a > div > i {
+    margin-bottom:2px;
+    transition: all 0.5s ease;
+    transform: rotate(90deg) !important;
+}
+
+.nav-item.show > a > div > i {
+    transition: all 0.5s ease;
+    transform: rotate(0deg) !important;
+}
+
 .nav-pills .nav-link {
-  border-radius: 0.25rem; }
+    border-radius: 0.25rem;
+}
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {

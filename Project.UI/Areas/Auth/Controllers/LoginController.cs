@@ -3,15 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
 using Project.ENTITY.Models;
-using Project.UI.Areas.Login.Models;
-using System.Data;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
+using Project.UI.Areas.Auth.Models;
 
-namespace Project.UI.Areas.Login.Controllers
+namespace Project.UI.Areas.Auth.Controllers
 {
     [AllowAnonymous]
-    [Area("Login")]
+    [Area("Auth")]
     public class LoginController : Controller
     {
         UserRepository _uRep;
@@ -55,6 +52,10 @@ namespace Project.UI.Areas.Login.Controllers
                     {
                         return RedirectToAction("Index", "Dashboard", new { area = "CustomerPanel" });
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Lütfen rol için yöneticiniz ile görüşün");
+                    }
                 }
                 else
                 {
@@ -67,7 +68,7 @@ namespace Project.UI.Areas.Login.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Login", "Login");
+            return RedirectToAction("Index", "Login", "Auth");
         }
     }
 }

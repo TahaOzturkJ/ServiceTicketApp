@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 
-namespace Project.UI.Areas.Login.Models
+namespace Project.UI.Areas.Auth.Models
 {
     public class UserRegisterViewModel
     {
@@ -19,13 +19,9 @@ namespace Project.UI.Areas.Login.Models
         [Compare("Password", ErrorMessage = "Şifreler uyumlu değil")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Lütfen şirket seçin")]
-        public int CompanyID { get; set; }
-
         [Required(ErrorMessage = "Lütfen mail girin")]
         public string Mail { get; set; }
 
-        [Required(ErrorMessage = "Lütfen fotoğraf adresini girin")]
-        public string ImageUrl { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

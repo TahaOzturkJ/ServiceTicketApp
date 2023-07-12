@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
 using Project.ENTITY.Models;
-using Project.UI.Areas.Login.Models;
+using Project.UI.Areas.Auth.Models;
 
-namespace Project.UI.Areas.Login.Controllers
+namespace Project.UI.Areas.Auth.Controllers
 {
     [AllowAnonymous]
-    [Area("Login")]
+    [Area("Auth")]
     public class RegisterController : Controller
     {
         CompanyRepository _cRep = new CompanyRepository();
@@ -37,24 +37,40 @@ namespace Project.UI.Areas.Login.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(UserRegisterViewModel urvm)
         {
-            var Companies = new SelectList(_cRep.GetActives(), "ID", "CompanyName");
-
-            if (Companies != null)
-            {
-                ViewBag.Companies = Companies;
-            }
 
             if (ModelState.IsValid)
             {
-                User u = new User()
-                {
-                    FullName = urvm.FullName,
-                    Email = urvm.Mail,
-                    UserName = urvm.UserName,
-                    ImageUrl = urvm.ImageUrl,
-                    CompanyID = urvm.CompanyID
-                };
+                User u = new User();
 
+                if (urvm.Image != null && Path.GetExtension(urvm.Image.FileName) != ".svg")
+                {
+                    var resource = Directory.GetCurrentDirectory();
+                    var extension = Path.GetExtension(urvm.Image.FileName);
+                    var imagename = Guid.NewGuid() + extension;
+                    var savelocation = resource + "/wwwroot/UserImage/" + imagename;
+                    var stream = new FileStream(savelocation, FileMode.Create);
+                    await urvm.Image.CopyToAsync(stream);
+                    u.ImageUrl = "/UserImage/" + imagename;
+                }
+
+
+                u.FullName = urvm.FullName;
+                u.Email = urvm.Mail;
+                u.UserName = urvm.UserName;
+
+                int startIndex = urvm.Mail.IndexOf('@') + 1;
+                int endIndex = urvm.Mail.IndexOf('.', startIndex);
+                string domain = urvm.Mail.Substring(startIndex, endIndex - startIndex).ToUpperInvariant();
+
+                var companies = _cRep.GetActives();
+                var matchedCompany = companies.FirstOrDefault(x => x.CompanyName.Replace(" ", "").ToUpperInvariant() == domain);
+                if (matchedCompany != null)
+                {
+                    u.CompanyID = matchedCompany.ID;
+                }
+                else {
+                    ModelState.AddModelError("", "Maalesef size hizmet verememekteyiz");
+                }
 
                 if (urvm.ConfirmPassword == urvm.Password)
                 {
@@ -62,7 +78,7 @@ namespace Project.UI.Areas.Login.Controllers
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Login", "Login");
+                        return RedirectToAction("Index", "Login", "Auth");
                     }
                     else
                     {

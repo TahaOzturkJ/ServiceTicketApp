@@ -26,21 +26,20 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
 
             ViewBag.Users = _uRep.GetActives();
 
-            var data = _stRep.GetAllActiveRelated().Where(st => st.CreatedByID == Convert.ToInt32(userId));
-
             var ownserviceTickets = _stRep.GetAllActiveRelated().Where(st => st.CreatedByID == Convert.ToInt32(userId) && st.TaskStatus != ENTITY.Enums.TaskStatus.Tamamlandı)
             .ToList();
             var doneserviceTickets = _stRep.GetAllActiveRelated().Where(st => st.CreatedByID == Convert.ToInt32(userId) && st.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
             .ToList();
 
             ViewBag.OwnCount = ownserviceTickets.Count;
+
             ViewBag.DoneCount = doneserviceTickets.Count;
 
             ViewBag.UserData = new Dictionary<int, List<User>>();
 
-            foreach (var item in data)
+            foreach (var item in ownserviceTickets)
             {
-                var UserServiceTickets = _ustRep.GetActives().Where(x => data.Select(d => item.ID).Contains(x.ServiceTicketID)).ToList();
+                var UserServiceTickets = _ustRep.GetActives().Where(x => ownserviceTickets.Select(d => item.ID).Contains(x.ServiceTicketID)).ToList();
 
                 List<User> userData = new List<User>();
 
@@ -113,6 +112,11 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Beklemede;
+            stVM.ServiceTicket.CreatedByID = Convert.ToInt32(userId);
+
             ValidationResult validationResult = validator.Validate(stVM.ServiceTicket);
 
             if (!validationResult.IsValid)
@@ -129,11 +133,6 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
             }
             else
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-
-                stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Beklemede;
-                stVM.ServiceTicket.CreatedByID = Convert.ToInt32(userId);
 
                 _stRep.Add(stVM.ServiceTicket);
                 toast.AddSuccessToastMessage("Destek bileti oluşturuldu.", new ToastrOptions { Title = "Başarılı!" });

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Project.BLL.EmailSender.IEmail;
+using Project.BLL.EmailSender.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ builder.Services.AddMvc(config =>
 builder.Services.AddMvc();
 
 builder.Services.AddScoped<IValidator<ServiceTicket>, ServiceTicketValidator>();
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project.UI.Areas.Login.Models
+namespace Project.UI.Areas.Auth.Models
 {
     public class UserLoginViewModel
     {

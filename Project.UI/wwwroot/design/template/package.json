@@ -1,5 +1,5 @@
 {
-  "name": "corona_admin",
+  "name": "bbs_admin",
   "version": "2.0.0",
   "description": "",
   "main": "index.html",
@@ -46,12 +46,5 @@
     "minimatch": "^3.0.4",
     "require-dir": "^1.2.0",
     "run-sequence": "^2.2.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "bootstrapdash",
-  "url": "http://www.bootstrapdash.com/",
-  "copyright": "",
-  "license": ""
+  }
 }

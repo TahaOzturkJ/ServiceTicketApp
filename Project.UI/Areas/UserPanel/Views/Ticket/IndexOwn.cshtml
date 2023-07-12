@@ -20,6 +20,12 @@
                                 <span class="badge">@ViewBag.AllCount</span>
                             </a>
                         </div>
+                        <div class="col-sm-1.5">
+                            <a href="/UserPanel/Ticket/IndexAvailable" class="btn btn-md">
+                                Boştakiler
+                                <span class="badge">@ViewBag.AvailableCount</span>
+                            </a>
+                        </div>
                         <div class="col-sm-1.5 active-header">
                             <a href="#" class="btn btn-md">
                                 Bana Ait
@@ -161,7 +167,7 @@
                             <th>BBS Personeli</th>
                             <th onclick="sortTable(4)">
                                 <div>
-                                    <b>Planlanan Tarih</b>
+                                    <b>Başlangıç Tarihi</b>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -176,7 +182,6 @@
                             </th>
                             <th onclick="sortTable(5)">
                                 <div>
-
                                     <b>Tamamlanma Tarihi</b>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
@@ -249,8 +254,22 @@
                                         <img src="@ust.ImageUrl" />
                                     }
                                 </td>
-                                <td>@item.PlannedDate.ToString("dd MMMM yyyy")</td>
-                                <td>@item.CompletionDate.ToString("dd MMMM yyyy")</td>
+                                @if (item.StartDate != null)
+                                {
+                                    <td>@item.StartDate.Value.ToString("dd MMMM yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                @if (item.CompletionDate != null)
+                                {
+                                    <td>@item.CompletionDate.Value.ToString("dd MMMM yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
 
                                 @if (item.TaskStatus == ENTITY.Enums.TaskStatus.Beklemede)
                                 {

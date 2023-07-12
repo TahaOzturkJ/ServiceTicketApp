@@ -15,8 +15,8 @@ namespace Project.ENTITY.Models
         public string Description { get; set; }
         public Priority TaskPriority { get; set; }
         public Enums.TaskStatus TaskStatus { get; set; }
-        public DateTime PlannedDate { get; set; }
-        public DateTime CompletionDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? CompletionDate { get; set; }
 
         //Relational Properties
         public virtual ICollection<UserServiceTicket> UserServiceTickets { get; set; }

@@ -4,7 +4,7 @@
 @model List<ServiceTicket>
 
 @{
-    ViewData["Title"] = "IndexDone";
+    ViewData["Title"] = "IndexAvailable";
     Layout = "~/Areas/UserPanel/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,8 +20,8 @@
                                 <span class="badge">@ViewBag.AllCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5">
-                            <a href="/UserPanel/Ticket/IndexAvailable" class="btn btn-md">
+                        <div class="col-sm-1.5 active-header">
+                            <a href="#" class="btn btn-md">
                                 Boştakiler
                                 <span class="badge">@ViewBag.AvailableCount</span>
                             </a>
@@ -32,8 +32,8 @@
                                 <span class="badge">@ViewBag.OwnCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5 active-header">
-                            <a href="#" class="btn btn-md">
+                        <div class="col-sm-1.5">
+                            <a href="/UserPanel/Ticket/IndexDone" class="btn btn-md">
                                 Tamamlanmış
                                 <span class="badge">@ViewBag.DoneCount</span>
                             </a>
@@ -104,7 +104,7 @@
                             <th onclick="sortTable(0)">
                                 <div>
                                     <b>Servis Numarası</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -119,7 +119,7 @@
                             <th onclick="sortTable(1)">
                                 <div>
                                     <b>Şirket Adı</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -134,7 +134,7 @@
                             <th onclick="sortTable(2)">
                                 <div>
                                     <b>Görev</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -151,7 +151,7 @@
                                 <div>
 
                                     <b>Talebi Açan Personel</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -168,7 +168,7 @@
                             <th onclick="sortTable(4)">
                                 <div>
                                     <b>Başlangıç Tarihi</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -182,9 +182,8 @@
                             </th>
                             <th onclick="sortTable(5)">
                                 <div>
-
                                     <b>Tamamlanma Tarihi</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -199,9 +198,8 @@
                             </th>
                             <th onclick="sortTable(6)">
                                 <div>
-
                                     <b>İlerleme Durumu</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -216,9 +214,8 @@
                             </th>
                             <th onclick="sortTable(7)">
                                 <div>
-
                                     <b>Öncelik Durumu</b>
-                                    <div>
+                                    <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M18 14l-6 -6l-6 6h12" />
@@ -229,7 +226,6 @@
                                         </svg>
                                     </div>
                                 </div>
-
                             </th>
                             <th></th>
                         </tr>

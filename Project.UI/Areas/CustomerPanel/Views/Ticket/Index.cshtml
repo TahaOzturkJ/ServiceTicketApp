@@ -104,9 +104,25 @@
                                 </div>
 
                             </th>
+                            <th onclick="sortTable(2)">
+                                <div>
+                                    <b>Başlangıç Tarihi</b>
+                                    <div class="sort-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M18 14l-6 -6l-6 6h12" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M6 10l6 6l6 -6h-12" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                            </th>
                             <th onclick="sortTable(3)">
                                 <div>
-                                    <b>Planlanan Başlangıç Tarihi</b>
+                                    <b>Tamamlanma Tarihi</b>
                                     <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -122,22 +138,6 @@
                             </th>
                             <th onclick="sortTable(4)">
                                 <div>
-                                    <b>Planlanan Tamamlanma Tarihi</b>
-                                    <div class="sort-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M18 14l-6 -6l-6 6h12" />
-                                        </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="16" height="16" viewBox="0 5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M6 10l6 6l6 -6h-12" />
-                                        </svg>
-                                    </div>
-                                </div>
-
-                            </th>
-                            <th onclick="sortTable(5)">
-                                <div>
                                     <b>İlerleme Durumu</b>
                                     <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
@@ -151,7 +151,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <th onclick="sortTable(6)">
+                            <th onclick="sortTable(5)">
                                 <div>
                                     <b>Öncelik Durumu</b>
                                     <div class="sort-icon">
@@ -182,9 +182,22 @@
                                 </td>
                                 <td>@item.ID</td>
                                 <td>@item.Task</td>
-                                <td>@item.PlannedDate.ToString("dd MMMM yyyy")</td>
-                                <td>@item.CompletionDate.ToString("dd MMMM yyyy")</td>
-
+                                @if (item.StartDate != null)
+                                {
+                                    <td>@item.StartDate.Value.ToString("dd MMMM yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                @if (item.CompletionDate != null)
+                                {
+                                    <td>@item.CompletionDate.Value.ToString("dd MMMM yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
                                 @if (item.TaskStatus == ENTITY.Enums.TaskStatus.Beklemede)
                                 {
                                     <td>
