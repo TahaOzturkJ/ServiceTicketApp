@@ -14,13 +14,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row header">
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <a href="/CustomerPanel/Ticket/Index" class="btn btn-md">
                                 Bana Ait
                                 <span class="badge">@ViewBag.OwnCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5 active-header">
+                        <div class="col-sm-auto active-header">
                             <a href="#" class="btn btn-md">
                                 Tamamlanmış
                                 <span class="badge">@ViewBag.DoneCount</span>
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
                                 <a href="#" class="btn btn-sm">
                                     <img src="~/design/template/assets/images/icons/print.png" />
@@ -40,7 +40,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
                                 <a href="#" class="btn btn-sm" onclick="event.preventDefault(); deleteAsBatch()">
                                     <img src="~/design/template/assets/images/icons/trash.png" />
@@ -48,7 +48,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-6 header-search">
+                        <div class="col-sm-auto header-search">
                             <div class="header-bar">
                                 <img src="~/design/template/assets/images/icons/loupe.png" />
                                 <input type="text" id="searchInput" class="header-search-input" placeholder="Ara" />
@@ -166,7 +166,6 @@
                                     </div>
                                 </div>
                             </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -231,17 +230,6 @@
                                     </td>
                                 }
                                 <td>@item.TaskPriority</td>
-                                <td class="text-right">
-                                    <div class="dropdown">
-                                        <a class="btn text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" href="/CustomerPanel/Ticket/DeleteTicket/@item.ID">Sil</a>
-                                            <a class="dropdown-item" href="/CustomerPanel/Ticket/EditTicket/@item.ID">Güncelle</a>
-                                        </div>
-                                    </div>
-                                </td>
                             </tr>
                         }
                     </tbody>

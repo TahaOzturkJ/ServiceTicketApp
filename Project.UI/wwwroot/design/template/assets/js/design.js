@@ -56,7 +56,7 @@ function unmarkAsCompleted() {
         document.body.appendChild(form);
         form.submit();
     } else {
-        // No checkboxes selected
+
     }
 }
 

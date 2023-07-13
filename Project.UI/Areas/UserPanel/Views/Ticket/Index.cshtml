@@ -14,25 +14,25 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row header">
-                        <div class="col-sm-1.5 active-header">
+                        <div class="col-sm-auto active-header">
                             <a href="#" class="btn btn-md">
                                 Hepsi
                                 <span class="badge">@ViewBag.AllCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <a href="/UserPanel/Ticket/IndexAvailable" class="btn btn-md">
                                 Boştakiler
                                 <span class="badge">@ViewBag.AvailableCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <a href="/UserPanel/Ticket/IndexOwn" class="btn btn-md">
                                 Bana Ait
                                 <span class="badge">@ViewBag.OwnCount</span>
                             </a>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <a href="/UserPanel/Ticket/IndexDone" class="btn btn-md">
                                 Tamamlanmış
                                 <span class="badge">@ViewBag.DoneCount</span>
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
                                 <a href="#" class="btn btn-sm" onclick="event.preventDefault(); markAsCompleted()">
                                     <img src="~/design/template/assets/images/icons/checked.png" />
@@ -52,7 +52,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
                                 <a href="#" class="btn btn-sm" onclick="event.preventDefault(); unmarkAsCompleted()">
                                     <img src="~/design/template/assets/images/icons/decline.png" />
@@ -60,15 +60,15 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
-                                <a href="#" class="btn btn-sm">
+                                <a href="#" class="btn btn-sm" @*onclick="event.preventDefault(); GeneratePDF()"*@>
                                     <img src="~/design/template/assets/images/icons/print.png" />
                                     Yazdır
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-1.5">
+                        <div class="col-sm-auto">
                             <div class="header-bar">
                                 <a href="#" class="btn btn-sm" onclick="event.preventDefault(); deleteAsBatch()">
                                     <img src="~/design/template/assets/images/icons/trash.png" />
@@ -76,7 +76,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-6 header-search">
+                        <div class="col-sm-auto header-search">
                             <div class="header-bar">
                                 <img src="~/design/template/assets/images/icons/loupe.png" />
                                 <input type="text" id="searchInput" class="header-search-input" placeholder="Ara" />
@@ -303,11 +303,12 @@
                                 <td>@item.TaskPriority</td>
                                 <td class="text-right">
                                     <div class="dropdown">
-                                        <a class="btn text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="btn text-black-50" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="/UserPanel/Ticket/DeleteTicket/@item.ID">Sil</a>
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/UserPanel/Ticket/EditTicket/@item.ID">Güncelle</a>
                                         </div>
                                     </div>

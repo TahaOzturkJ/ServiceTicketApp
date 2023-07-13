@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
 using Project.ENTITY.Models;
-using Project.UI.Areas.UserPanel.Models;
+using Project.UI.Areas.CustomerPanel.Models;
 using System.Data;
 using System.Security.Claims;
 
@@ -149,6 +149,57 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
             _ustRep.DeleteRange(ustvalues);
             toast.AddErrorToastMessage("Destek bileti silindi", new ToastrOptions { Title = "Başarılı!" });
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult EditTicket(int id)
+        {
+
+            ServiceTicketVM stVM = new ServiceTicketVM
+            {
+                ServiceTicket = _stRep.Find(id)
+            };
+
+            return View(stVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast)
+        {
+
+            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket);
+
+            if (!validationResult.IsValid)
+            {
+                foreach (ValidationFailure failure in validationResult.Errors)
+                {
+                    string KeyValue = "ServiceTicket." + failure.PropertyName;
+                    ModelState[KeyValue].Errors.Clear();
+                    ModelState[KeyValue].Errors.Add(failure.ErrorMessage);
+                }
+                toast.AddErrorToastMessage("Destek bileti güncellenemedi.", new ToastrOptions { Title = "Başarısız!" });
+                return View(stVM);
+            }
+            else
+            {
+                _stRep.Update(stVM.ServiceTicket);
+
+                toast.AddInfoToastMessage("Destek bileti güncellendi.", new ToastrOptions { Title = "Başarılı!" });
+
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult PreviewTicket(int id)
+        {
+
+            ServiceTicketVM stVM = new ServiceTicketVM
+            {
+                ServiceTicket = _stRep.Find(id)
+            };
+
+            return View(stVM);
         }
 
     }

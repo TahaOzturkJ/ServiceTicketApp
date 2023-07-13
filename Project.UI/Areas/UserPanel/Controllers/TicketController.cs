@@ -1,25 +1,18 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NToastNotify;
-using NuGet.Protocol.Plugins;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
-using Project.BLL.EmailSender.Email;
 using Project.BLL.EmailSender.IEmail;
-using Project.BLL.Validations;
 using Project.ENTITY.Models;
 using Project.UI.Areas.UserPanel.Models;
 using SelectPdf;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using System.Security.Cryptography.Xml;
 
 namespace Project.UI.Areas.UserPanel.Controllers
 {
@@ -488,20 +481,26 @@ namespace Project.UI.Areas.UserPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Print(List<string> checkboxes, string html, [FromServices] IToastNotification toast)
+        public IActionResult GeneratePDF(List<string> checkboxes, [FromServices] IToastNotification toast)
         {
-            html = html.Replace("StrTag", "<").Replace("EndTag", ">");
+            if (checkboxes != null && checkboxes.Any())
+            {
+                foreach (var id in checkboxes)
+                {
+                    HtmlToPdf converter = new HtmlToPdf();
+                    PdfDocument doc = converter.ConvertUrl("https://localhost:7005/UserPanel/Ticket/Index/EditTicket/"+id);
+                    doc.Save("serviceticket"+id+".pdf");
+                    doc.Close();
 
-            HtmlToPdf oHtmlToPdf = new HtmlToPdf();
-            PdfDocument oPdfDocument = oHtmlToPdf.ConvertHtmlString(html);
-            byte[] pdf = oPdfDocument.Save();
-            oPdfDocument.Close();
-            return File(
-                   pdf,
-                   "application/pdf",
-                   "StudentList.pdf"
-                );
+                }
+                toast.AddErrorToastMessage("Destek bileti silindi.", new ToastrOptions { Title = "Başarılı!" });
+            }
+            else
+            {
+                toast.AddErrorToastMessage("Destek bileti silinemedi.", new ToastrOptions { Title = "Başarısız!" });
+            }
 
+            return RedirectToAction("Index");
         }
 
         public IActionResult DeleteAsBatch(List<string> checkboxes, [FromServices] IToastNotification toast)

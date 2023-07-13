@@ -1,0 +1,70 @@
+﻿@model Project.UI.Areas.CustomerPanel.Models.ServiceTicketVM
+
+@{
+    ViewData["Title"] = "EditTicket";
+    Layout = "~/Areas/CustomerPanel/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Servis Bileti Görüntüleme Paneli</h4>
+            <form class="form-sample">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.Task">İş Tanımı</label>
+                            <span asp-validation-for="ServiceTicket.Task" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" asp-for="ServiceTicket.Task" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskPriority">Görev Önceliği</label>
+                                <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.TaskPriority" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskStatus">Görev Durumu</label>
+                                <span asp-validation-for="ServiceTicket.TaskStatus" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.TaskStatus" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label">Açıklama</label>
+                            <span asp-validation-for="ServiceTicket.Description" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" asp-for="ServiceTicket.Description" rows="7" cols="3" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.StartDate">Planlanan Başlama Tarihi</label>
+                                <span asp-validation-for="ServiceTicket.StartDate" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" asp-for="ServiceTicket.StartDate" readonly />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.CompletionDate">Planlanan Bitirilme Tarihi</label>
+                                <span asp-validation-for="ServiceTicket.CompletionDate" class="text-danger"></span>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" asp-for="ServiceTicket.CompletionDate" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
