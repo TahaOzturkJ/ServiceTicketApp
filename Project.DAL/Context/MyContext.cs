@@ -34,6 +34,8 @@ namespace Project.DAL.Context
         public virtual DbSet<ServiceTicket> ServiceTickets { get; set; } = null!;
         public virtual DbSet<Company> Companies { get; set; } = null!;
         public virtual DbSet<UserServiceTicket> UserServiceTickets { get; set; } = null!;
+        public virtual DbSet<ServiceTicketImage> ServiceTicketImages { get; set; } = null!;
+        public virtual DbSet<ServiceTicketComment> ServiceTicketComments { get; set; } = null!;
 
     }
 }

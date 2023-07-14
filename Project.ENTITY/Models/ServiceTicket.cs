@@ -20,6 +20,8 @@ namespace Project.ENTITY.Models
 
         //Relational Properties
         public virtual ICollection<UserServiceTicket> UserServiceTickets { get; set; }
+        public virtual ICollection<ServiceTicketComment> ServiceTicketComments { get; set; }
+        public virtual ICollection<ServiceTicketImage> ServiceTicketImages { get; set; }
 
         [ForeignKey("User")]
         public int? CreatedByID { get; set; }

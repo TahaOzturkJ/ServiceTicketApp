@@ -30,6 +30,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
         ServiceTicketRepository _stRep = new ServiceTicketRepository();
         UserServiceTicketRepository _ustRep = new UserServiceTicketRepository();
         UserRepository _uRep = new UserRepository();
+        ServiceTicketImageRepository _stiRep = new ServiceTicketImageRepository();
 
         public IActionResult Index()
         {
@@ -227,7 +228,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
             int count = 0;
 
-            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
+            ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
 
             if (!validationResult.IsValid)
             {
@@ -244,6 +245,28 @@ namespace Project.UI.Areas.UserPanel.Controllers
             else
             {
                 _stRep.Add(stVM.ServiceTicket);
+
+                if (stVM.Image != null)
+                {
+                    foreach (var item in stVM.Image)
+                    {
+                        var resource = Directory.GetCurrentDirectory();
+                        var extension = Path.GetExtension(item.FileName);
+                        var imagename = Guid.NewGuid() + extension;
+                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var stream = new FileStream(savelocation, FileMode.Create);
+                        await item.CopyToAsync(stream);
+
+                        ServiceTicketImage sti = new ServiceTicketImage
+                        {
+                            ServiceTicketID = stVM.ServiceTicket.ID,
+                            ImageUrl = "/TicketImage/" + imagename
+                        };
+
+                        _stiRep.Add(sti);
+                    }
+                }
+
                 toast.AddSuccessToastMessage("Destek bileti oluşturuldu.", new ToastrOptions { Title = "Başarılı!" });
 
                 if (stVM.UserIds != null)
@@ -312,7 +335,8 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
             ServiceTicketVM stVM = new ServiceTicketVM
             {
-                ServiceTicket = _stRep.Find(id)
+                ServiceTicket = _stRep.Find(id),
+                ServiceTicketImages = _stiRep.Where(x => x.ServiceTicketID == id).ToList()
             };
 
             return View(stVM);
@@ -330,7 +354,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 stVM.ServiceTicket.TaskStatus = ENTITY.Enums.TaskStatus.Planlandı;
             }
 
-            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
+            ValidationResult validationResult = validator.Validate(stVM.ServiceTicket, options => options.IncludeRuleSets("Dates"));
 
             if (!validationResult.IsValid)
             {
@@ -422,6 +446,27 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 }
 
                 _stRep.Update(stVM.ServiceTicket);
+
+                if (stVM.Image != null)
+                {
+                    foreach (var item in stVM.Image)
+                    {
+                        var resource = Directory.GetCurrentDirectory();
+                        var extension = Path.GetExtension(item.FileName);
+                        var imagename = Guid.NewGuid() + extension;
+                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var stream = new FileStream(savelocation, FileMode.Create);
+                        await item.CopyToAsync(stream);
+
+                        ServiceTicketImage sti = new ServiceTicketImage
+                        {
+                            ServiceTicketID = stVM.ServiceTicket.ID,
+                            ImageUrl = "/TicketImage/" + imagename
+                        };
+
+                        _stiRep.Add(sti);
+                    }
+                }
 
                 toast.AddInfoToastMessage("Destek bileti güncellendi.", new ToastrOptions { Title = "Başarılı!" });
 
@@ -524,6 +569,14 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
             return RedirectToAction("Index");
 
+        }
+
+        public IActionResult DeleteImage(int id, [FromServices] IToastNotification toast)
+        {
+            var stivalues = _stiRep.Find(id);
+            _stiRep.Destroy(stivalues);
+            toast.AddSuccessToastMessage("Fotoğraf silindi", new ToastrOptions { Title = "Başarılı!" });
+            return RedirectToAction("EditTicket", new { id = stivalues.ServiceTicketID });
         }
     }
 }

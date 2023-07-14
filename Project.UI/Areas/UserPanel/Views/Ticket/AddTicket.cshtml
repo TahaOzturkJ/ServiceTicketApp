@@ -89,10 +89,21 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <button type="submit" class="btn align-middle btn-primary btn-icon-text">
-                                    <i class="mdi mdi-file-check btn-icon-prepend"></i> Ekle
-                                </button>
+                                <label class="col-sm-12 col-form-label">Fotoğraf</label>
+                                <div class="col-sm-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="fileInput" asp-for="Image" multiple />
+                                        <label class="custom-file-label" for="fileInput">Dosya Seç</label>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn align-middle btn-primary btn-icon-text">
+                                <i class="mdi mdi-file-check btn-icon-prepend"></i> Ekle
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -108,4 +119,21 @@
     new MultiSelectTag('UserIds', {
         placeholder: 'Ara'
     })  // id
+
+    // Get the file input element
+    const fileInput = document.getElementById('fileInput');
+    // Get the label element
+    const label = document.querySelector('.custom-file-label');
+
+    // Add event listener for file selection
+    fileInput.addEventListener('change', function (e) {
+        // Get the list of selected files
+        const fileList = Array.from(e.target.files);
+
+        // Create an array to store the names of the selected files
+        const fileNames = fileList.map(file => file.name);
+
+        // Update the label's text with the list of selected file names
+        label.textContent = fileNames.join(', ');
+    });
 </script>

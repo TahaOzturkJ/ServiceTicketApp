@@ -94,10 +94,57 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <button type="submit" class="btn align-middle btn-primary btn-icon-text">
-                                    <i class="mdi mdi-file-check btn-icon-prepend"></i> Düzenle
-                                </button>
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicketImage.ImageUrl">Fotoğraflar</label>
+                                <div class="image-input">
+                                    <div class="images">
+                                        @if (Model.ServiceTicketImages != null)
+                                        {
+                                            @foreach (var item in Model.ServiceTicketImages)
+                                            {
+                                                <div class="image">
+                                                    <a href="#" data-toggle="modal" data-target="#imageModal_@item.ID">
+                                                        <img src="@item.ImageUrl">
+                                                    </a>
+                                                    <div class="remove">
+                                                        <a href="/UserPanel/Ticket/DeleteImage/@item.ID" class="remove-image">X</a>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Image Modal -->
+                                                <div class="modal fade" id="imageModal_@item.ID" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel_@item.ID" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg modal-image-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="imageModalLabel_@item.ID">Fotoğraf</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <img src="@item.ImageUrl" class="img-fluid modal-image">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+
+                                    <div class="addImage">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="fileInput" asp-for="Image" multiple />
+                                            <label class="custom-file-label" for="fileInput">Fotoğraf Seç</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn align-middle btn-primary btn-icon-text">
+                                <i class="mdi mdi-file-check btn-icon-prepend"></i> Düzenle
+                            </button>
                         </div>
                     </div>
                 </div>
