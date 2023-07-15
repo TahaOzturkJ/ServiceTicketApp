@@ -90,6 +90,38 @@ function deleteAsBatch() {
     }
 }
 
+function GeneratePDF() {
+    var checkboxes = document.getElementsByName('checkboxes');
+    var selectedCheckboxes = [];
+
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            selectedCheckboxes.push(checkbox.value);
+        }
+    });
+
+    if (selectedCheckboxes.length > 0) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/UserPanel/Ticket/GeneratePDF';
+
+        selectedCheckboxes.forEach(function (id) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'checkboxes';
+            input.value = id;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        // No checkboxes selected
+    }
+}
+
+
+
 
 //Checkbox Selector
 

@@ -24,7 +24,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
         public TicketController(IEmailSender emailSender)
         {
-           _emailSender = emailSender;
+            _emailSender = emailSender;
         }
 
         ServiceTicketRepository _stRep = new ServiceTicketRepository();
@@ -489,7 +489,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
                     var receiver = person.Email;
 
-                    var subject = "Oluşturmuş olduğunuz "+item.ID+" numaralı "+item.Task+" İsimli Servis Bileti Hakkında";
+                    var subject = "Oluşturmuş olduğunuz " + item.ID + " numaralı " + item.Task + " İsimli Servis Bileti Hakkında";
 
                     var message = "Belirtmiş olduğunuz " + item.Description + " açıklamalı sorun çözülmüştür.";
 
@@ -533,9 +533,245 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 foreach (var id in checkboxes)
                 {
                     HtmlToPdf converter = new HtmlToPdf();
-                    PdfDocument doc = converter.ConvertUrl("https://localhost:7005/UserPanel/Ticket/Index/EditTicket/"+id);
-                    doc.Save("serviceticket"+id+".pdf");
+
+                    string htmlContent = @"
+        <html>
+        <head>
+            <style>
+.col-12{
+    position: relative;
+    width: 100%;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+.grid-margin {
+  margin-bottom: 1.5rem; 
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: transparent;
+    background-clip: border-box;
+    border: 0;
+    border-radius: 0.25rem;
+    border-radius: 0.25rem; 
+}
+  .card .card-body {
+    padding: 1.75rem 1.5625rem; 
+}
+    .card .card-body + .card-body {
+      padding-top: 1rem; 
+}
+  .card .card-title {
+    color: #000;
+    margin-bottom: 1.125rem;
+    text-transform: capitalize; 
+}
+
+.card-title {
+    margin-bottom: 0.75rem;
+}
+h4, .h4 {
+    font-size: 1.125rem;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 500;
+}
+a, div, h1, h2, h3, h4, h5, p, span {
+    text-shadow: none;
+}
+h4, .h4 {
+    font-size: 1.5rem;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+* {
+    box-sizing: border-box;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+    margin-right: -0.75rem;
+    margin-left: -0.75rem;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .lightGallery .image-tile, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto, .col-sm-0-5 .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm, .col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md, .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg, .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
+    position: relative;
+    width: 100%;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    line-height: 1;
+    vertical-align: top;
+}
+.col-form-label {
+    padding-top: calc(0.56rem + 1px);
+    padding-bottom: calc(0.56rem + 1px);
+    margin-bottom: 0;
+    font-size: inherit;
+    line-height: 1;
+}
+
+.col-sm-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%; 
+}
+
+.form-control {
+    box-shadow: none;
+}
+.form-control {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: 2.875rem;
+    padding: 0.56rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #495057;
+    background-color: #EAEAEA;
+    background-clip: padding-box;
+    border: 1px solid #2c2e33;
+    border-radius: 4px;
+}
+
+            </style>
+        </head>
+        <body>
+<div class=""col-12 grid-margin"">
+    <div class=""card"">
+        <div class=""card-body"">
+                <div class=""row"">
+                    <div class=""col-md-6"">
+                        <div class=""form-group row"">
+                            <label class=""col-sm-12 col-form-label"">İş Tanımı</label>
+                            <div class=""col-sm-12"">
+                                <input type=""text"" class=""form-control""/>
+                            </div>
+                        </div>
+                        <div class=""form-group row"">
+                            <label class=""col-sm-12 col-form-label"">Destek İsteyen Personel</label>
+                            <div class=""col-sm-12"">
+                                <input type=""text"" class=""form-control""/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=""col-md-6"">
+                        <div class=""form-group row"">
+                            <label class=""col-sm-12 col-form-label"">Açıklama</label>
+                            <div class=""col-sm-12"">
+                                <textarea class=""form-control"" rows=""7"" cols=""3""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=""col-md-6"">
+                        <div class=""form-group row"">
+                            <div class=""col-sm-6"">
+                                <label class=""col-sm-12 col-form-label"">Görev Önceliği</label>
+                                <div class=""col-sm-12"">
+                                <input type=""text"" class=""form-control""/>
+                                </div>
+                            </div>
+                            <div class=""col-sm-6"">
+                                <label class=""col-sm-12 col-form-label"">Görev Durumu</label>
+                                <div class=""col-sm-12"">
+                                <input type=""text"" class=""form-control""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=""col-md-6"">
+                        <div class=""form-group row"">
+                            <div class=""col-sm-6"">
+                                <label class=""col-sm-12 col-form-label"">Planlanan Başlama Tarihi</label>
+                                <div class=""col-sm-12"">
+                                    <input type=""text"" class=""form-control""/>
+                                </div>
+                            </div>
+                            <div class=""col-sm-6"">
+                                <label class=""col-sm-12 col-form-label"">Planlanan Bitirilme Tarihi</label>
+                                <div class=""col-sm-12"">
+                                    <input type=""text"" class=""form-control""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=""col-md-6"">
+                        <div class=""form-group row"">
+                            <div class=""col-sm-6"">
+                                <label class=""col-sm-12 col-form-label"">BBS Personeli</label>
+                                <div class=""col-sm-12"">
+                                <input type=""text"" class=""form-control""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+        </body>
+        </html>";
+                    PdfDocument doc = converter.ConvertHtmlString(htmlContent);
+
+                    MemoryStream ms = new MemoryStream();
+                    doc.Save(ms);
+                    ms.Position = 0;
+
+                    // Clean up
                     doc.Close();
+
+                    // Return the PDF as a file attachment for download
+                    return File(ms.ToArray(), "application/pdf", "output.pdf");
 
                 }
                 toast.AddErrorToastMessage("Destek bileti silindi.", new ToastrOptions { Title = "Başarılı!" });

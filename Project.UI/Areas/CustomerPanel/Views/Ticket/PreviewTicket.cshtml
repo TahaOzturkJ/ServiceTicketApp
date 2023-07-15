@@ -9,62 +9,97 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Servis Bileti Görüntüleme Paneli</h4>
-            <form class="form-sample">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.Task">İş Tanımı</label>
-                            <span asp-validation-for="ServiceTicket.Task" class="text-danger"></span>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" asp-for="ServiceTicket.Task" readonly />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskPriority">Görev Önceliği</label>
-                                <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" asp-for="ServiceTicket.TaskPriority" readonly>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskStatus">Görev Durumu</label>
-                                <span asp-validation-for="ServiceTicket.TaskStatus" class="text-danger"></span>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" asp-for="ServiceTicket.TaskStatus" readonly>
-                                </div>
-                            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.Task">İş Tanımı</label>
+                        <span asp-validation-for="ServiceTicket.Task" class="text-danger"></span>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" asp-for="ServiceTicket.Task" readonly />
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-12 col-form-label">Açıklama</label>
-                            <span asp-validation-for="ServiceTicket.Description" class="text-danger"></span>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskPriority">Görev Önceliği</label>
+                            <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
                             <div class="col-sm-12">
-                                <textarea class="form-control" asp-for="ServiceTicket.Description" rows="7" cols="3" readonly></textarea>
+                                <input type="text" class="form-control" asp-for="ServiceTicket.TaskPriority" readonly>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.StartDate">Planlanan Başlama Tarihi</label>
-                                <span asp-validation-for="ServiceTicket.StartDate" class="text-danger"></span>
-                                <div class="col-sm-12">
-                                    <input type="date" class="form-control" asp-for="ServiceTicket.StartDate" readonly />
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.CompletionDate">Planlanan Bitirilme Tarihi</label>
-                                <span asp-validation-for="ServiceTicket.CompletionDate" class="text-danger"></span>
-                                <div class="col-sm-12">
-                                    <input type="date" class="form-control" asp-for="ServiceTicket.CompletionDate" readonly />
-                                </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.TaskStatus">Görev Durumu</label>
+                            <span asp-validation-for="ServiceTicket.TaskStatus" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" asp-for="ServiceTicket.TaskStatus" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label">Açıklama</label>
+                        <span asp-validation-for="ServiceTicket.Description" class="text-danger"></span>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" asp-for="ServiceTicket.Description" rows="7" cols="3" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.StartDate">Planlanan Başlama Tarihi</label>
+                            <span asp-validation-for="ServiceTicket.StartDate" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <input type="date" class="form-control" asp-for="ServiceTicket.StartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.CompletionDate">Planlanan Bitirilme Tarihi</label>
+                            <span asp-validation-for="ServiceTicket.CompletionDate" class="text-danger"></span>
+                            <div class="col-sm-12">
+                                <input type="date" class="form-control" asp-for="ServiceTicket.CompletionDate" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-sm-6">
+                        <label class="col-sm-12 col-form-label" asp-for="ServiceTicketImage.ImageUrl">Fotoğraflar</label>
+                        <div class="image-input">
+                            <div class="images">
+                                @if (Model.ServiceTicketImages != null)
+                                {
+                                    @foreach (var item in Model.ServiceTicketImages)
+                                    {
+                                        <div class="image">
+                                            <a href="#" data-toggle="modal" data-target="#imageModal_@item.ID">
+                                                <img src="@item.ImageUrl">
+                                            </a>
+                                        </div>
+
+                                        <!-- Image Modal -->
+                                        <div class="modal fade" id="imageModal_@item.ID" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel_@item.ID" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg modal-image-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="imageModalLabel_@item.ID">Fotoğraf</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <img src="@item.ImageUrl" class="img-fluid modal-image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

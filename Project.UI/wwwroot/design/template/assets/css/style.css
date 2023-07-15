@@ -10161,10 +10161,6 @@ input[type="button"].btn-block {
     height: auto;
 }
 
-    .modal-image-dialog .modal-content {
-        max-height: 90vh;
-    }
-
     .modal-image-dialog .modal-body {
         text-align: center;
     }

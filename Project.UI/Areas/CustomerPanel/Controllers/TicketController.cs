@@ -241,7 +241,8 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
 
             ServiceTicketVM stVM = new ServiceTicketVM
             {
-                ServiceTicket = _stRep.Find(id)
+                ServiceTicket = _stRep.Find(id),
+                ServiceTicketImages = _stiRep.Where(x => x.ServiceTicketID == id).ToList()
             };
 
             return View(stVM);
