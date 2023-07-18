@@ -28,6 +28,8 @@ namespace Project.ENTITY.Models
 
         public virtual ICollection<UserServiceTicket> UserServiceTickets { get; set; }
 
+        public virtual ICollection<ServiceTicketComment> ServiceTicketComments { get; set; }
+
         public User()
         {
             CreatedDate = DateTime.Now;

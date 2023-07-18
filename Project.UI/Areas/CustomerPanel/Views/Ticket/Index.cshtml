@@ -8,6 +8,10 @@
     Layout = "~/Areas/CustomerPanel/Views/Shared/_Layout.cshtml";
 }
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -34,7 +38,7 @@
                     <div class="form-group row">
                         <div class="col-sm-auto">
                             <div class="header-bar">
-                                <a href="#" class="btn btn-sm">
+                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); customerGeneratePDF()">
                                     <img src="~/design/template/assets/images/icons/print.png" />
                                     Yazdır
                                 </a>
@@ -42,7 +46,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="header-bar">
-                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); deleteAsBatch()">
+                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); customerDeleteAsBatch()">
                                     <img src="~/design/template/assets/images/icons/trash.png" />
                                     Sil
                                 </a>
@@ -181,7 +185,7 @@
                                     </div>
                                 </td>
                                 <td>@item.ID</td>
-                                <td>@item.Task</td>
+                                <td class="limited-text">@item.Task</td>
                                 @if (item.StartDate != null)
                                 {
                                     <td>@item.StartDate.Value.ToString("dd MMMM yyyy")</td>

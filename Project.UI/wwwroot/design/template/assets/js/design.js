@@ -60,7 +60,7 @@ function unmarkAsCompleted() {
     }
 }
 
-function deleteAsBatch() {
+function userDeleteAsBatch() {
     var checkboxes = document.getElementsByName('checkboxes');
     var selectedCheckboxes = [];
 
@@ -73,7 +73,7 @@ function deleteAsBatch() {
     if (selectedCheckboxes.length > 0) {
         var form = document.createElement('form');
         form.method = 'POST';
-        form.action = '/UserPanel/Ticket/DeleteAsBatch';
+        form.action = '/UserPanel/Ticket/userDeleteAsBatch';
 
         selectedCheckboxes.forEach(function (id) {
             var input = document.createElement('input');
@@ -90,7 +90,7 @@ function deleteAsBatch() {
     }
 }
 
-function GeneratePDF() {
+function userGeneratePDF() {
     var checkboxes = document.getElementsByName('checkboxes');
     var selectedCheckboxes = [];
 
@@ -103,7 +103,67 @@ function GeneratePDF() {
     if (selectedCheckboxes.length > 0) {
         var form = document.createElement('form');
         form.method = 'POST';
-        form.action = '/UserPanel/Ticket/GeneratePDF';
+        form.action = '/UserPanel/Ticket/userGeneratePDF';
+
+        selectedCheckboxes.forEach(function (id) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'checkboxes';
+            input.value = id;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        // No checkboxes selected
+    }
+}
+
+function customerDeleteAsBatch() {
+    var checkboxes = document.getElementsByName('checkboxes');
+    var selectedCheckboxes = [];
+
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            selectedCheckboxes.push(checkbox.value);
+        }
+    });
+
+    if (selectedCheckboxes.length > 0) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/CustomerPanel/Ticket/customerDeleteAsBatch';
+
+        selectedCheckboxes.forEach(function (id) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'checkboxes';
+            input.value = id;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        // No checkboxes selected
+    }
+}
+
+function customerGeneratePDF() {
+    var checkboxes = document.getElementsByName('checkboxes');
+    var selectedCheckboxes = [];
+
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            selectedCheckboxes.push(checkbox.value);
+        }
+    });
+
+    if (selectedCheckboxes.length > 0) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/CustomerPanel/Ticket/customerGeneratePDF';
 
         selectedCheckboxes.forEach(function (id) {
             var input = document.createElement('input');
@@ -151,7 +211,7 @@ function selectAllRows() {
     }
 }
 
-//Sorting  -- Sorunlu
+//Sorting
 
 var currentSortColumn = -1;
 var isSortAscending = true;
@@ -223,5 +283,19 @@ $(document).ready(function () {
             // Show or hide the row based on the search input match
             $(this).toggle(rowText.indexOf(searchText) > -1);
         });
+    });
+});
+
+//Limit characters
+
+$(document).ready(function () {
+    $('.limited-text').each(function () {
+        var maxLength = 30;
+        var text = $(this).text();
+
+        if (text.length > maxLength) {
+            var limitedText = text.substring(0, maxLength) + '...';
+            $(this).text(limitedText);
+        }
     });
 });

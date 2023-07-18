@@ -16,10 +16,10 @@ namespace Project.BLL.Validations
 
             RuleFor(x => x.Task).NotEmpty().WithMessage("Başlık alanı boş bırakılamaz")
                 .MinimumLength(4).WithMessage("Başlık alanı en az 4 harf içermeli")
-                .MaximumLength(30).WithMessage("Başlık alanı en fazla 30 harf içermeli");
+                .MaximumLength(100).WithMessage("Başlık alanı en fazla 30 harf içermeli");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Açıklama alanı boş bırakılamaz")
                                        .MinimumLength(4).WithMessage("Açıklama alanı en az 4 harf içermeli")
-                                       .MaximumLength(100).WithMessage("Açıklama alanı en fazla 20 harf içermeli");
+                                       .MaximumLength(400).WithMessage("Açıklama alanı en fazla 20 harf içermeli");
             RuleFor(x => x.TaskPriority).NotEmpty().WithMessage("Öncelik alanı boş bırakılamaz");
             RuleFor(x => x.TaskStatus).NotEmpty().WithMessage("Destek durumu boş bırakılamaz");
             RuleFor(x => x.StartDate).LessThanOrEqualTo(x => x.StartDate).WithMessage("Başlama tarihi bitiş tarihinden daha büyük olamaz");

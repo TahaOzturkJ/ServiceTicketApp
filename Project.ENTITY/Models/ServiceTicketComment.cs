@@ -19,6 +19,10 @@ namespace Project.ENTITY.Models
         public int ServiceTicketID { get; set; }
         public virtual ServiceTicket ServiceTicket { get; set; }
 
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
+
         public virtual ICollection<ServiceTicketCommentImage> ServiceTicketCommentImages { get; set; }
 
     }

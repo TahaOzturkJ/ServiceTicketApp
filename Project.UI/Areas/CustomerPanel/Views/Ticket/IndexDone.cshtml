@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <div class="col-sm-auto">
                             <div class="header-bar">
-                                <a href="#" class="btn btn-sm">
+                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); customerGeneratePDF()">
                                     <img src="~/design/template/assets/images/icons/print.png" />
                                     Yazdır
                                 </a>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="header-bar">
-                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); deleteAsBatch()">
+                                <a href="#" class="btn btn-sm" onclick="event.preventDefault(); customerDeleteAsBatch()">
                                     <img src="~/design/template/assets/images/icons/trash.png" />
                                     Sil
                                 </a>

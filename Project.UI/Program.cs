@@ -39,6 +39,7 @@ builder.Services.AddMvc(config =>
 builder.Services.AddMvc();
 
 builder.Services.AddScoped<IValidator<ServiceTicket>, ServiceTicketValidator>();
+builder.Services.AddScoped<IValidator<ServiceTicketComment>, ServiceTicketCommentValidator>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
