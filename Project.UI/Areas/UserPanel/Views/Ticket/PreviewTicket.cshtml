@@ -1,8 +1,8 @@
-﻿@model Project.UI.Areas.CustomerPanel.Models.ServiceTicketVM
+﻿@model Project.UI.Areas.UserPanel.Models.ServiceTicketVM
 
 @{
     ViewData["Title"] = "PreviewTicket";
-    Layout = "~/Areas/CustomerPanel/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/UserPanel/Views/Shared/_Layout.cshtml";
 }
 
 <script src="~/design/template/assets/js/jquery-3.7.0.min.js"></script>
@@ -124,7 +124,7 @@
             <div class="row comments" id="comments-section">
                 @if (Model.ServiceTicketComments != null)
                 {
-                    @foreach (var ServiceTicketComment in Model.ServiceTicketComments.OrderByDescending(x=>x.CreatedDate))
+                    @foreach (var ServiceTicketComment in Model.ServiceTicketComments.OrderByDescending(x => x.CreatedDate))
                     {
                         var timeDifference = DateTime.Now - ServiceTicketComment.CreatedDate;
                         string formattedTime = string.Empty;
@@ -175,30 +175,33 @@
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <div class="comment-images">
-                                        @foreach (var serviceTicketCommentImage in Model.ServiceTicketCommentImages)
+                                        @if (ServiceTicketComment.ServiceTicketCommentImages != null)
                                         {
-                                            <div class="comment-image">
-                                                <a href="" data-toggle="modal" data-target="#imageModal_@serviceTicketCommentImage.ID">
-                                                    <img src="@serviceTicketCommentImage.ImageUrl">
-                                                </a>
-                                            </div>
+                                            @foreach (var serviceTicketCommentImage in Model.ServiceTicketCommentImages.Where(x => x.ServiceTicketCommentID == ServiceTicketComment.ID))
+                                            {
+                                                <div class="comment-image">
+                                                    <a href="" data-toggle="modal" data-target="#imageModal_@serviceTicketCommentImage.ID">
+                                                        <img src="@serviceTicketCommentImage.ImageUrl">
+                                                    </a>
+                                                </div>
 
-                                            <!-- Image Modal -->
-                                            <div class="modal fade" id="imageModal_@serviceTicketCommentImage.ID" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel_@serviceTicketCommentImage.ID" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg modal-image-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="imageModalLabel_@serviceTicketCommentImage.ID">Fotoğraf</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <img src="@serviceTicketCommentImage.ImageUrl" class="img-fluid modal-image">
+                                                <!-- Image Modal -->
+                                                <div class="modal fade" id="imageModal_@serviceTicketCommentImage.ID" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel_@serviceTicketCommentImage.ID" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg modal-image-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="imageModalLabel_@serviceTicketCommentImage.ID">Fotoğraf</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <img src="@serviceTicketCommentImage.ImageUrl" class="img-fluid modal-image">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         }
                                     </div>
                                 </div>

@@ -19,7 +19,7 @@ namespace Project.UI.Areas.CustomerPanel.ViewComponents.CustomerSidebar
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var values = await _userManager.FindByNameAsync(User.Identity.Name);
-            UserEditViewModel model = new UserEditViewModel();
+            UserViewModel model = new UserViewModel();
             model.FullName = values.FullName;
             model.ImageUrl = values.ImageUrl;
 

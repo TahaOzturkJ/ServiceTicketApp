@@ -44,11 +44,11 @@ namespace Project.UI.Areas.Auth.Controllers
                     var currentuser = await userManager.FindByIdAsync(userId.ToString());
                     var userRoles = await userManager.GetRolesAsync(currentuser);
 
-                    if (userRoles.Any(x=> x == "SuperAdmin" || x == "Admin"))
+                    if (userRoles.Any(x=> x == "Üst Yönetici" || x == "Yönetici"))
                     {
                         return RedirectToAction("Index", "Dashboard", new { area = "UserPanel" });
                     }
-                    else if (userRoles.Any(x=> x == "Member"))
+                    else if (userRoles.Any(x=> x == "Üye"))
                     {
                         return RedirectToAction("Index", "Dashboard", new { area = "CustomerPanel" });
                     }

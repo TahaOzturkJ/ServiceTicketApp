@@ -1,6 +1,6 @@
 ﻿namespace Project.UI.Areas.CustomerPanel.Models
 {
-    public class UserEditViewModel
+    public class UserViewModel
     {
         public string FullName { get; set; }
         public string Password { get; set; }

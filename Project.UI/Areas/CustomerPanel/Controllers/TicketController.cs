@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace Project.UI.Areas.CustomerPanel.Controllers
 {
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Üye")]
     [Area("CustomerPanel")]
     public class TicketController : Controller
     {
@@ -320,7 +320,6 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
             }
 
         }
-
 
         public IActionResult DeleteImage(int id, [FromServices] IToastNotification toast)
         {

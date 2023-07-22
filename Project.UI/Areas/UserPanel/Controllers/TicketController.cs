@@ -18,7 +18,7 @@ using System.Security.Claims;
 
 namespace Project.UI.Areas.UserPanel.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Üst Yönetici")]
     [Area("UserPanel")]
     public class TicketController : Controller
     {
@@ -33,6 +33,8 @@ namespace Project.UI.Areas.UserPanel.Controllers
         UserServiceTicketRepository _ustRep = new UserServiceTicketRepository();
         UserRepository _uRep = new UserRepository();
         ServiceTicketImageRepository _stiRep = new ServiceTicketImageRepository();
+        ServiceTicketCommentRepository _stcRep = new ServiceTicketCommentRepository();
+        ServiceTicketCommentImageRepository _stciRep = new ServiceTicketCommentImageRepository();
 
         public IActionResult Index()
         {
@@ -474,6 +476,87 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
                 return RedirectToAction("Index");
             }
+        }
+
+        [HttpGet]
+        public IActionResult PreviewTicket(int id)
+        {
+            //Servis biletini ve altındaki bütün yorumları getir
+            ServiceTicketVM stVM = new ServiceTicketVM
+            {
+                ServiceTicket = _stRep.Find(id),
+                ServiceTicketImages = _stiRep.Where(x => x.ServiceTicketID == id).ToList(),
+                ServiceTicketComments = _stcRep.Where(x => x.ServiceTicketID == id).ToList(),
+                ServiceTicketCommentImages = _stciRep.Where(x => x.ServiceTicketComment.ServiceTicketID == id).ToList()
+            };
+
+            return View(stVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PreviewTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicketComment> validator, [FromServices] IToastNotification toast)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (stVM.ServiceTicketComment != null)
+            {
+                stVM.ServiceTicket = _stRep.Find(stVM.ServiceTicket.ID);
+
+                stVM.ServiceTicketComment.ServiceTicketID = stVM.ServiceTicket.ID;
+
+                stVM.ServiceTicketImages = _stiRep.Where(x => x.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
+
+            }
+
+            FluentValidation.Results.ValidationResult validationResult = validator.Validate(stVM.ServiceTicketComment);
+
+            if (!validationResult.IsValid)
+            {
+
+                foreach (ValidationFailure failure in validationResult.Errors)
+                {
+                    string KeyValue = "ServiceTicketComment." + failure.PropertyName;
+                    ModelState[KeyValue].Errors.Clear();
+                    ModelState[KeyValue].Errors.Add(failure.ErrorMessage);
+                }
+                toast.AddErrorToastMessage("Destek bileti yorumu oluşturulamadı.", new ToastrOptions { Title = "Başarısız!" });
+                return View(stVM);
+            }
+            else
+            {
+                stVM.ServiceTicketComment.UserId = Convert.ToInt32(userId);
+
+                _stcRep.Add(stVM.ServiceTicketComment);
+
+                if (stVM.Image != null)
+                {
+                    foreach (var item in stVM.Image)
+                    {
+                        var resource = Directory.GetCurrentDirectory();
+                        var extension = Path.GetExtension(item.FileName);
+                        var imagename = Guid.NewGuid() + extension;
+                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var stream = new FileStream(savelocation, FileMode.Create);
+                        await item.CopyToAsync(stream);
+
+                        ServiceTicketCommentImage stci = new ServiceTicketCommentImage
+                        {
+                            ServiceTicketCommentID = stVM.ServiceTicketComment.ID,
+                            ImageUrl = "/TicketImage/" + imagename
+                        };
+
+                        _stciRep.Add(stci);
+                    }
+                }
+
+                stVM.ServiceTicketComments = _stcRep.Where(x => x.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
+                stVM.ServiceTicketCommentImages = _stciRep.Where(x => x.ServiceTicketComment.ServiceTicketID == stVM.ServiceTicket.ID).ToList();
+
+                toast.AddSuccessToastMessage("Destek bileti yorumu oluşturuldu.", new ToastrOptions { Title = "Başarılı!" });
+
+                return View(stVM);
+            }
+
         }
 
         public async Task<IActionResult> MarkAsCompleted(List<string> checkboxes, [FromServices] IToastNotification toast)

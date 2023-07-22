@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Project.ENTITY.Enums;
+﻿using Project.ENTITY.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Project.ENTITY.Models
 {
-    public class UserRole : IdentityUserRole<int>
+    public class IdentityRole : IdentityRole<int>
     {
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }

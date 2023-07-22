@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Project.UI.Areas.UserPanel.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Üst Yönetici")]
     [Area("UserPanel")]
     public class DashboardController : Controller
     {

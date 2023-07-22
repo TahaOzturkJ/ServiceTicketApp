@@ -32,5 +32,6 @@ namespace Project.UI.Areas.UserPanel.Models
 
         public List<int>? UserIds { get; set; }
 
+        public List<UserRoleInfo> UserRoles { get; set; } = new List<UserRoleInfo>();
     }
 }

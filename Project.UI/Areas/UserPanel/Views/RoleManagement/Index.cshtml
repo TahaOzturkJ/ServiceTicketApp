@@ -1,0 +1,126 @@
+﻿@using Project.ENTITY.Models
+@using Project.BLL.Helpers
+@using System.IO
+@model Project.UI.Areas.UserPanel.Models.ServiceTicketVM
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/UserPanel/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://kit.fontawesome.com/3690f8811d.js" crossorigin="anonymous"></script>
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-user">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="table-header">
+                                    Ekip Üyeleri
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var item in Model.Users)
+                        {
+                            <tr>
+                                <td class="user">
+                                    <div class="user-image">
+                                        @if (File.Exists(item.ImageUrl))
+                                        {
+                                            <div class="user-image-text">
+                                                @item.ImageUrl
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="user-image-text">
+                                                @Html.GetInitials(item.FullName)
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-fullname">
+                                            @item.FullName
+                                        </div>
+                                        <div class="user-mail">
+                                            @item.Email
+                                        </div>
+                                    </div>
+                                    <div class="user-attributes">
+                                        <div class="user-status">
+                                            <div class="status">
+                                                @item.DataStatus
+                                            </div>
+                                        </div>
+                                        <div class="user-role">
+                                            <div class="dropdown dropdown-user">
+                                                <a class="btn text-blue" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @foreach (var userRoleInfo in Model.UserRoles.Where(x=>x.UserId == item.Id))
+                                                    {
+                                                        if (userRoleInfo.Roles.Any())
+                                                        {
+                                                            @foreach (var userRole in userRoleInfo.Roles)
+                                                            {
+                                                                <span>
+                                                                    @userRole
+                                                                </span>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Rol Atanmadı</span>
+                                                        }
+
+                                                    }
+                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-user-menu" id="user-@item.Id-roles">
+                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeUserRole(@item.Id, 'Üst Yönetici')">Üst Yönetici</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeUserRole(@item.Id, 'Yönetici')">Yönetici</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeUserRole(@item.Id, 'Üye')">Üye</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeUserRole(@item.Id, 'Misafir')">Misafir</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="user-delete">
+                                            <a class="btn" href="/UserPanel/RoleManagement/DeleteUser/item.ID">
+                                                <i class="fa-regular fa-trash-can fa-lg delete-color"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeUserRole(userId, roleName) {
+        $.post("/UserPanel/RoleManagement/ChangeRole", { userId: userId, roleName: roleName })
+            .done(function (data) {
+                // Success: Display a toast message
+                toastr.success(data.message, "Başarılı!");
+                // Refresh the page after a short delay (e.g., 1 second)
+                setTimeout(function () {
+                    location.reload();
+                }, 1000); // Adjust the delay as needed
+            })
+            .fail(function (error) {
+                // Error: Display an error message if the role change fails
+                toastr.error("Kullanıcının rolünü güncellerken bir hata oluştu", "Başarısız!");
+            });
+    }
+</script>
+
+

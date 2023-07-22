@@ -21,7 +21,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyContext>();
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<MyContext>();
+builder.Services.AddIdentity<User, Project.ENTITY.Models.IdentityRole>()
+    .AddEntityFrameworkStores<MyContext>();
+
 builder.Services.AddControllersWithViews()
     .AddNToastNotifyToastr(new ToastrOptions
     {
@@ -86,6 +88,6 @@ app.UseEndpoints(endpoints =>
     );
 });
 
-app.MapRazorPages();
+    app.MapRazorPages();
 
 app.Run();

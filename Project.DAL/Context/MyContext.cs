@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Project.ENTITY.Models;
 using System;
@@ -7,10 +8,11 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityRole = Project.ENTITY.Models.IdentityRole;
 
 namespace Project.DAL.Context
 {
-    public class MyContext : IdentityDbContext<User, Role, int>
+    public class MyContext : IdentityDbContext<User, ENTITY.Models.IdentityRole, int>
     {
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,6 +32,10 @@ namespace Project.DAL.Context
             base.OnModelCreating(builder);
         }
 
+
+        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<IdentityRole> IdentityRoles { get; set; } = null!;
+        public virtual DbSet<IdentityUserRole> IdentityUserRoles { get; set; } = null!;
 
         public virtual DbSet<ServiceTicket> ServiceTickets { get; set; } = null!;
         public virtual DbSet<Company> Companies { get; set; } = null!;
