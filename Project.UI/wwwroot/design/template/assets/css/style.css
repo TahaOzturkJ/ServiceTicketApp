@@ -17,7 +17,7 @@
     + Tooltips
     + popovers
   * Core Styles
-    + Reset Styles
+    + Reset .
     + Fonts
     + Functions
     + Backgrounds
@@ -13247,6 +13247,107 @@ input[type="button"].btn-block {
 .dropdown-user-menu {
     margin-left: 0.7rem !important;
 }
+
+.profile-card{
+    background-color: #EAEAEA;
+    border: 1px solid #c8c8c8;
+    border-radius:10px;
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-start;
+}
+
+.card-content{
+    padding-left: 2rem;
+}
+
+.card-sidebar{
+    border-right: 1.5px solid #c8c8c8;
+    padding-right: 2rem;
+}
+
+.profile-sidebar{
+    display:flex;
+    justify-content:flex-start;
+    flex-direction:column;
+}
+
+    .profile-sidebar div {
+        transition: color,background-color ease 0.3s;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 16px;
+        width:fit-content;
+    }
+
+        .profile-sidebar div:last-child{
+            margin-top:210px;
+        }
+
+        .profile-sidebar div:last-child > a {
+            color: #fc424a;
+        }
+
+        .profile-sidebar div:hover {
+            background-color: #c2d5ff;
+        }
+
+            .profile-sidebar div:hover > a {
+                color: #0155ff;
+            }
+
+        .profile-sidebar div a {
+            color: #525252;
+            text-decoration:none;
+        }
+
+.Profile-Content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border: 1px solid #c8c8c8;
+    border-radius: 18px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    height: 100px;
+    align-items: center;
+    width: 1300px;
+}
+
+.user-edit{
+    transition: color,background-color ease 0.5s;
+    margin-left:auto;
+    width: 5% !important;
+
+    border: 1px solid #c8c8c8;
+    border-radius:20px;
+    text-align:center;
+}
+
+    .user-edit a {
+        color: #5b5b5b;
+        text-decoration: none;
+    }
+
+.user-edit:hover {
+    background-color: #c2d5ff;
+}
+
+.user-edit a:hover{
+    color: #0155ff;
+}
+
+.Profile-Information{
+    border: 1px solid #c8c8c8;
+    border-radius: 20px;
+    padding-left:20px;
+    padding-top:20px;
+
+    margin-top:30px;
+}
+
 
 
 
@@ -27846,6 +27947,7 @@ div.tagsinput {
     -webkit-transition: left 0.25s ease;
     -moz-transition: left 0.25s ease;
     -ms-transition: left 0.25s ease;
+    -webkit-box-shadow: 0px 5px 5px -7px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 992px) {
@@ -27907,7 +28009,6 @@ div.tagsinput {
     -webkit-transition: width 0.25s ease;
     -moz-transition: width 0.25s ease;
     -ms-transition: width 0.25s ease;
-    -webkit-box-shadow: 5px 5px 5px -7px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
     color: #ffffff;
     padding-left: 15px;

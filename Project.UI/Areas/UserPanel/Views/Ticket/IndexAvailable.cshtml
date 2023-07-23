@@ -243,7 +243,7 @@
                                 </td>
                                 <td>@item.ID</td>
                                 <td><b>@item.User.Company.CompanyName</b></td>
-                                <td>@item.Task</td>
+                                <td class="limited-text">@item.Task</td>
                                 <td><img src="@item.User.ImageUrl" /> @item.User.FullName</td>
                                 <td>
                                     @foreach (var ust in ViewBag.UserData[item.ID])
