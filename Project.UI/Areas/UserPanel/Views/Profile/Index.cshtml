@@ -1,11 +1,11 @@
 ﻿@using Project.ENTITY.Models
 @using Project.BLL.Helpers
 @using System.IO
-@model Project.UI.Areas.CustomerPanel.Models.UserEditVM
+@model Project.UI.Areas.UserPanel.Models.UserEditVM
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Areas/CustomerPanel/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/UserPanel/Views/Shared/_Layout.cshtml";
 }
 
 <script src="~/design/template/assets/js/jquery-3.7.0.min.js"></script>
@@ -29,50 +29,50 @@
                 </div>
             </div>
             <div class="card-content">
-                    <h4>Profilim</h4>
-                    <div class="Profile-Content">
-                        <div class="user-image profile-image">
-                            <div class="user-image-text">
+                <h4>Profilim</h4>
+                <div class="Profile-Content">
+                    <div class="user-image profile-image">
+                        <div class="user-image-text">
                             @Html.GetInitials(Model.Name+" "+Model.Surname)
                         </div>
-                        </div>
-                        <div class="user-info">
-                            <div class="user-fullname">
-                                @Model.Name @Model.Surname
-                            </div>
-                        </div>
-                        <div class="user-edit">
-                            <a href="#">Düzenle</a>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-fullname">
+                            @Model.Name @Model.Surname
                         </div>
                     </div>
-                    <div class="Profile-Information">
-                        <div class="information-content">
-                            <h4>Kişisel Bilgiler</h4>
-                            <div class="profile-fullname">
-                                <div class="profile-name editable-field">
-                                    <label class="profile-label">Ad</label>
+@*                    <div class="user-edit">
+                        <a href="#">Düzenle</a>
+                    </div>*@
+                </div>
+                <div class="Profile-Information">
+                    <div class="information-content">
+                        <h4>Kişisel Bilgiler</h4>
+                        <div class="profile-fullname">
+                            <div class="profile-name editable-field">
+                                <label class="profile-label">Ad</label>
                                 <span class="field-value editable" contenteditable="true" data-field="Name" id="nameSpan">@Model.Name</span>
-                                </div>
-                                <div class="profile-surname editable-field">
-                                    <label class="profile-label">Soyad</label>
-                                <span class="field-value editable" contenteditable="true" data-field="Surname" id="surnameSpan">@Model.Surname</span>
-                                </div>
                             </div>
-                            <div class="profile-mailphone editable-field">
-                                <div class="profile-mail">
-                                    <label class="profile-label">Email Adresi</label>
-                                <span class="field-value editable" contenteditable="true" data-field="Mail" id="emailSpan">@Model.Mail</span>
-                                </div>
-                                <div class="profile-phone">
-                                    <label class="profile-label">Telefon No</label>
-                                <span class="field-value editable" contenteditable="true" data-field="Phone" id="phoneSpan">@Model.Phone</span>
-                                </div>
+                            <div class="profile-surname editable-field">
+                                <label class="profile-label">Soyad</label>
+                                <span class="field-value editable" contenteditable="true" data-field="Surname" id="surnameSpan">@Model.Surname</span>
                             </div>
                         </div>
-                        <div class="personel-content-edit">
-                            <a href="/CustomerPanel/Profile/UpdateFields">Düzenle</a>
+                        <div class="profile-mailphone editable-field">
+                            <div class="profile-mail">
+                                <label class="profile-label">Email Adresi</label>
+                                <span class="field-value editable" contenteditable="true" data-field="Mail" id="emailSpan">@Model.Mail</span>
+                            </div>
+                            <div class="profile-phone">
+                                <label class="profile-label">Telefon No</label>
+                                <span class="field-value editable" contenteditable="true" data-field="Phone" id="phoneSpan">@Model.Phone</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="personel-content-edit">
+                        <a href="/UserPanel/Profile/UpdateFields">Düzenle</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -92,12 +92,9 @@
                 type: 'POST',
                 data: { Name: name, Surname: surname, Mail: email, Phone: phone },
                 success: function (result) {
-                    // Optional: Handle success response from the server
-                    // Refresh the page after the update is successful
                     location.reload();
                 },
                 error: function (error) {
-                    // Optional: Handle error response from the server
                 }
             });
         }

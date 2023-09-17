@@ -13282,7 +13282,7 @@ input[type="button"].btn-block {
     }
 
         .profile-sidebar div:last-child{
-            margin-top:210px;
+            margin-top:17rem;
         }
 
         .profile-sidebar div:last-child > a {
@@ -13319,7 +13319,8 @@ input[type="button"].btn-block {
 .user-edit{
     transition: color,background-color ease 0.5s;
     margin-left:auto;
-    width: 5% !important;
+    width:80px;
+    height:30px;
 
     border: 1px solid #c8c8c8;
     border-radius:20px;
@@ -13339,17 +13340,92 @@ input[type="button"].btn-block {
     color: #0155ff;
 }
 
-.Profile-Information{
+.Profile-Information {
+    position:relative;
+
     border: 1px solid #c8c8c8;
     border-radius: 20px;
-    padding-left:20px;
-    padding-top:20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    margin-top: 30px;
 
-    margin-top:30px;
+}
+
+.information-contact {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.profile-fullname {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.profile-fullname div {
+    width:50%;
+}
+
+.profile-label {
+    display: block;
+    color: #949aa0;
+}
+
+.profile-mailphone{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.profile-mailphone div{
+    width: 50%;
+}
+
+.personel-content-edit {
+    position:absolute;
+    top: 20px;
+    right: 20px;
+
+    transition: color,background-color ease 0.5s;
+    margin-left: auto;
+    border: 1px solid #c8c8c8;
+    border-radius: 20px;
+    text-align: center;
+
+    width: 80px;
+    height: 30px;
+
+}
+
+.hidden {
+    display: none;
+}
+
+.editable {
+    cursor: text;
+}
+
+span:focus-visible{
+    outline:none;
 }
 
 
+    .personel-content-edit a {
+        color: #5b5b5b;
+        text-decoration: none;
+    }
 
+    .personel-content-edit:hover {
+        background-color: #c2d5ff;
+    }
+
+    .personel-content-edit a:hover {
+        color: #0155ff;
+    }
 
 .btn-group, .fc .fc-button-group,
 .btn-group-vertical {

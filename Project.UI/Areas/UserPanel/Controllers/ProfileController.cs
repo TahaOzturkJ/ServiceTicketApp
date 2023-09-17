@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
-using Project.UI.Areas.CustomerPanel.Models;
+using Project.UI.Areas.UserPanel.Models;
 using System.Data;
 using System.Security.Claims;
 
-namespace Project.UI.Areas.CustomerPanel.Controllers
+namespace Project.UI.Areas.UserPanel.Controllers
 {
-    [Authorize(Roles = "Üye")]
-    [Area("CustomerPanel")]
+    [Authorize(Roles = "Üst Yönetici")]
+    [Area("UserPanel")]
     public class ProfileController : Controller
     {
         UserRepository _uRep = new UserRepository();
@@ -34,7 +34,7 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateFields(string Name,string Surname,string Mail,string Phone)
+        public IActionResult UpdateFields(string Name, string Surname, string Mail, string Phone)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
