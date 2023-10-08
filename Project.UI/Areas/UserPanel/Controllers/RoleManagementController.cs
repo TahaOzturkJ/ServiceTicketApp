@@ -48,21 +48,21 @@ namespace Project.UI.Areas.UserPanel.Controllers
         [HttpPost]
         public IActionResult ChangeRole(int userId, string roleName)
         {
-            var user = _uRep.GetActives().Where(x => x.Id == userId);
+            var user = _uRep.FirstOrDefault(x=>x.Id == userId);
 
-            if (_urRep.GetAll().Where(x => x.UserId == user.First().Id) != null)
+            if (_urRep.Any(x => x.UserId == user.Id))
             {
-                var currentRoles = _urRep.GetAll().Where(x => x.UserId == user.First().Id);
+                var currentRoles = _urRep.FirstOrDefault(x => x.UserId == user.Id);
 
-                _urRep.Destroy(currentRoles.FirstOrDefault());
+                _urRep.Destroy(currentRoles);
             }
 
-            var role = _rRep.GetAll().Where(x => x.Name == roleName);
+            var role = _rRep.Where(x => x.Name == roleName);
 
             IdentityUserRole iuRole = new IdentityUserRole()
             {
                 UserId = userId,
-                RoleId = role.Select(x => x.Id).FirstOrDefault()
+                RoleId = role.First().Id
             };
 
             _urRep.Add(iuRole);
