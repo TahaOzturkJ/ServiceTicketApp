@@ -17,11 +17,11 @@ namespace Project.BLL.EmailSender.Email
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("tahozturk@stu.okan.edu.tr", "Tahaozturk41!")
+                Credentials = new NetworkCredential("mail", "password")
             };
 
             return client.SendMailAsync(
-                new MailMessage(from: "tahozturk@stu.okan.edu.tr",
+                new MailMessage(from: "mail",
                                 to: email,
                                 subject,
                                 message
