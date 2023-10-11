@@ -16,9 +16,9 @@ using Project.BLL.EmailSender.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
+
 
 builder.Services.AddDbContext<MyContext>();
 builder.Services.AddIdentity<User, Project.ENTITY.Models.IdentityRole>()
@@ -50,8 +50,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.Name = "loggeduser";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-    options.LoginPath = "/Login/Login/Index";
-    options.AccessDeniedPath = "/Login/Error/Index/";
+    options.LoginPath = "/Auth/Login/Index";
+    options.AccessDeniedPath = "/Auth/Error/Index/";
 });
 
 var app = builder.Build();
@@ -66,7 +66,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseNToastNotify();
 
-app.UseStatusCodePagesWithReExecute("/Login/Error/Error404/");
+app.UseStatusCodePagesWithReExecute("/Auth/Error/Error404/", "?code={0}");
 
 app.UseHttpsRedirection();
 
@@ -80,14 +80,15 @@ app.UseAuthorization();
 
 app.UseSession();
 
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "default",
-      pattern: "{area=login}/{controller=login}/{action=index}/{id?}"
+      pattern: "{area=Auth}/{controller=Login}/{action=Index}/{id?}"
     );
 });
 
-    app.MapRazorPages();
+app.MapRazorPages();
 
 app.Run();
