@@ -13,7 +13,7 @@ namespace Project.ENTITY.Models
     public class User : IdentityUser<int>
     {
         public string FullName { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? DeletedDate { get; set; }

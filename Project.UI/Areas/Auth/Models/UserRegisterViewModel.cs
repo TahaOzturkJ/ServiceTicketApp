@@ -22,6 +22,6 @@ namespace Project.UI.Areas.Auth.Models
         [Required(ErrorMessage = "Lütfen mail girin")]
         public string Mail { get; set; }
 
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

@@ -19,8 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
 
-
 builder.Services.AddDbContext<MyContext>();
+
 builder.Services.AddIdentity<User, Project.ENTITY.Models.IdentityRole>()
     .AddEntityFrameworkStores<MyContext>();
 
@@ -51,7 +51,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = "loggeduser";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/Auth/Login/Index";
-    options.AccessDeniedPath = "/Auth/Error/Index/";
+    options.AccessDeniedPath = "/Auth/Error/Error/";
 });
 
 var app = builder.Build();
@@ -59,14 +59,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Auth/Error/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseNToastNotify();
 
-app.UseStatusCodePagesWithReExecute("/Auth/Error/Error404/", "?code={0}");
+app.UseStatusCodePagesWithRedirects("/Auth/Error/{0}");
+app.UseStatusCodePagesWithReExecute("/Auth/Error", "?statusCode={0}");
+app.UseStatusCodePagesWithReExecute("/Auth/Error/{0}");
 
 app.UseHttpsRedirection();
 
@@ -79,7 +81,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
-
 
 app.UseEndpoints(endpoints =>
 {

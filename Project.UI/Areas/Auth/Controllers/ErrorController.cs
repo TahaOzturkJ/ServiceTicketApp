@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Project.UI.Areas.Auth.Controllers
 {
+    [AllowAnonymous]
+    [Area("Auth")]
     public class ErrorController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Error(string errCode)
         {
+            if (errCode == "500" || errCode == "404" || errCode == "403")
+            {
+                return View($"/Auth/Error/{errCode}.cshtml");
+            }
+
             return View();
         }
 
-        public IActionResult Error404()
-        {
-            return View();
-        }
     }
 }

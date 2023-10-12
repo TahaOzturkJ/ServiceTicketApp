@@ -13,11 +13,11 @@ namespace Project.BLL.EmailSender.Email
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            var client = new SmtpClient("smtp.gmail.com", 587)
+            var client = new SmtpClient("smtp.office365.com", 587)
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("mail", "password")
+                Credentials = new NetworkCredential("mail", "şifre")
             };
 
             return client.SendMailAsync(
