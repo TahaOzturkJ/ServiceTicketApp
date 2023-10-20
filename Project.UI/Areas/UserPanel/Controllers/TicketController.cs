@@ -1,24 +1,21 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NToastNotify;
+using NuGet.Versioning;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
 using Project.BLL.EmailSender.IEmail;
 using Project.ENTITY.Models;
 using Project.UI.Areas.UserPanel.Models;
-using Project.UI.Pages.CustomerPanel.Views.Ticket;
 using SelectPdf;
 using System.IO.Compression;
 using System.Security.Claims;
 
 namespace Project.UI.Areas.UserPanel.Controllers
 {
-    [Authorize(Roles = "Üst Yönetici")]
+    [Authorize(Roles = "Üst Yönetici,Yönetici")]
     [Area("UserPanel")]
     public class TicketController : Controller
     {
@@ -35,6 +32,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
         ServiceTicketImageRepository _stiRep = new ServiceTicketImageRepository();
         ServiceTicketCommentRepository _stcRep = new ServiceTicketCommentRepository();
         ServiceTicketCommentImageRepository _stciRep = new ServiceTicketCommentImageRepository();
+        CompanyRepository _cRep = new CompanyRepository();
 
         public IActionResult Index()
         {
@@ -200,6 +198,7 @@ namespace Project.UI.Areas.UserPanel.Controllers
         {
             var BBSUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID == 1), "Id", "FullName");
             var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
+            var Companies = new SelectList(_cRep.GetActives(), "CompanyName", "CompanyName");
 
             if (BBSUsers != null)
             {
@@ -209,16 +208,22 @@ namespace Project.UI.Areas.UserPanel.Controllers
             if (OtherUsers != null)
             {
                 ViewBag.OtherUsers = OtherUsers;
+            }
+
+            if (Companies != null)
+            {
+                ViewBag.Companies = Companies;
             }
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast)
+        public async Task<IActionResult> AddTicket(ServiceTicketVM stVM, [FromServices] IValidator<ServiceTicket> validator, [FromServices] IToastNotification toast,string companyName)
         {
             var BBSUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID == 1), "Id", "FullName");
             var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
+            var Companies = new SelectList(_cRep.GetActives(), "CompanyName", "CompanyName");
 
             if (BBSUsers != null)
             {
@@ -228,6 +233,11 @@ namespace Project.UI.Areas.UserPanel.Controllers
             if (OtherUsers != null)
             {
                 ViewBag.OtherUsers = OtherUsers;
+            }
+
+            if (Companies != null)
+            {
+                ViewBag.Companies = Companies;
             }
 
             int count = 0;
@@ -248,7 +258,22 @@ namespace Project.UI.Areas.UserPanel.Controllers
             }
             else
             {
+                //Mail Gönderme İşlemi
+                var receiver = stVM.ServiceTicket.PersonInNeedMail;
+
+                var subject = $"Oluşturmuş olduğunuz {stVM.ServiceTicket.Task} isimli servis bileti hakkında";
+
+                var message = $"Sayın {stVM.ServiceTicket.PersonInNeedName} belirtmiş olduğunuz {stVM.ServiceTicket.Description} açıklamalı sorun tarafımıza iletilmiştir, en kısa sürede destek verilecektir.";
+
+                var selectedCompany = _cRep.FirstOrDefault(x => x.CompanyName == companyName);
+
+                var selectedCompanyRepresentative = _uRep.FirstOrDefault(x => x.FullName == selectedCompany.CompanyRepresentative);
+
+                stVM.ServiceTicket.CreatedByID = selectedCompanyRepresentative.Id;
+                
                 _stRep.Add(stVM.ServiceTicket);
+
+                await _emailSender.SendEmailAsync(receiver, subject, message);
 
                 if (stVM.Image != null)
                 {
@@ -257,19 +282,25 @@ namespace Project.UI.Areas.UserPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
                     }
                 }
+
 
                 toast.AddSuccessToastMessage("Destek bileti oluşturuldu.", new ToastrOptions { Title = "Başarılı!" });
 
@@ -326,6 +357,16 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
             var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
 
+            var Companies = new SelectList(_cRep.GetActives(), "CompanyName", "CompanyName");
+
+            var ticketInfo = _stRep.Find(id);
+
+            if (ticketInfo.CreatedByID != null)
+            {
+                var userInfo = _uRep.Find((int)ticketInfo.CreatedByID);
+                var selectedCompany = userInfo.Company.CompanyName;
+                Companies.FirstOrDefault(x => x.Value == selectedCompany).Selected = true;
+            }
 
             if (BBSUsers != null)
             {
@@ -335,6 +376,11 @@ namespace Project.UI.Areas.UserPanel.Controllers
             if (OtherUsers != null)
             {
                 ViewBag.OtherUsers = OtherUsers;
+            }
+
+            if (Companies != null)
+            {
+                ViewBag.Companies = Companies;
             }
 
             ServiceTicketVM stVM = new ServiceTicketVM
@@ -387,6 +433,16 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
                 var OtherUsers = new SelectList(_uRep.GetActives().Where(x => x.CompanyID != 1), "Id", "FullName");
 
+                var Companies = new SelectList(_cRep.GetActives(), "CompanyName", "CompanyName");
+
+                var ticketInfo = _stRep.Find(stVM.ServiceTicket.ID);
+
+                if (ticketInfo.CreatedByID != null)
+                {
+                    var userInfo = _uRep.Find((int)ticketInfo.CreatedByID);
+                    var selectedCompany = userInfo.Company.CompanyName;
+                    Companies.FirstOrDefault(x => x.Value == selectedCompany).Selected = true;
+                }
 
                 if (BBSUsers != null)
                 {
@@ -396,6 +452,11 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 if (OtherUsers != null)
                 {
                     ViewBag.OtherUsers = OtherUsers;
+                }
+
+                if (Companies != null)
+                {
+                    ViewBag.Companies = Companies;
                 }
 
                 foreach (ValidationFailure failure in validationResult.Errors)
@@ -458,14 +519,19 @@ namespace Project.UI.Areas.UserPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
@@ -535,17 +601,22 @@ namespace Project.UI.Areas.UserPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
-                        ServiceTicketCommentImage stci = new ServiceTicketCommentImage
+                        ServiceTicketImage sti = new ServiceTicketImage
                         {
-                            ServiceTicketCommentID = stVM.ServiceTicketComment.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ServiceTicketID = stVM.ServiceTicket.ID,
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
-                        _stciRep.Add(stci);
+                        _stiRep.Add(sti);
                     }
                 }
 
@@ -620,6 +691,8 @@ namespace Project.UI.Areas.UserPanel.Controllers
                 List<string> ticketAssigned = new List<string>();
 
                 List<MemoryStream> pdfStreams = new List<MemoryStream>();
+
+                MemoryStream pdfStream = new MemoryStream();
 
                 foreach (var id in checkboxes)
                 {
@@ -1051,16 +1124,15 @@ textarea{
 
                         PdfDocument doc = converter.ConvertHtmlString(htmlContent);
 
-                        MemoryStream ms = new MemoryStream();
-                        doc.Save(ms);
+                        doc.Save(pdfStream);
                         doc.Close();
 
-                        ms.Position = 0;
-
-                        pdfStreams.Add(ms);
+                        pdfStream.Position = 0;
 
                         userNamesString = null;
                         ticketAssigned.Clear();
+
+                        pdfStreams.Add(pdfStream);
                     }
                     else
                     {
@@ -1475,43 +1547,20 @@ textarea{
 
                         PdfDocument doc = converter.ConvertHtmlString(htmlContent);
 
-                        MemoryStream ms = new MemoryStream();
-                        doc.Save(ms);
+                        doc.Save(pdfStream);
                         doc.Close();
 
-                        ms.Position = 0;
+                        // Set the position to the beginning of the stream
+                        pdfStream.Position = 0;
 
-                        pdfStreams.Add(ms);
-
+                        // Return the PDF file as a response
+                        pdfStreams.Add(pdfStream);
                     }
-                }
 
-                if (pdfStreams.Any())
-                {
-                    using (MemoryStream zipStream = new MemoryStream())
-                    {
-                        using (ZipArchive zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
-                        {
-                            for (int i = 0; i < pdfStreams.Count; i++)
-                            {
-                                var pdfStream = pdfStreams[i];
-                                var entry = zipArchive.CreateEntry($"ticket_{i + 1}.pdf");
-
-                                using (var entryStream = entry.Open())
-                                {
-                                    pdfStream.CopyTo(entryStream);
-                                }
-
-                                pdfStream.Close();
-                                pdfStream.Dispose();
-                            }
-                        }
-
-                        zipStream.Position = 0;
-                        return File(zipStream.ToArray(), "application/zip", "tickets.zip");
-                    }
+                    return File(pdfStream.ToArray(), "application/pdf", $"TicketID:{ticketId}.pdf");
                 }
             }
+
             else
             {
                 toast.AddErrorToastMessage("Destek bileti yazdırılamadı.", new ToastrOptions { Title = "Başarısız!" });

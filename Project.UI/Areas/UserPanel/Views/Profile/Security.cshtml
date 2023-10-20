@@ -1,7 +1,7 @@
 ﻿@using Project.ENTITY.Models
 @using Project.BLL.Helpers
 @using System.IO
-@model Project.UI.Areas.UserPanel.Models.UserEditVM
+@model Project.UI.Areas.UserPanel.Models.UserPasswordVM
 
 @{
     ViewData["Title"] = "Index";
@@ -9,8 +9,6 @@
 }
 
 <script src="~/design/template/assets/js/jquery-3.7.0.min.js"></script>
-
-<h3>Hesap Ayarları</h3>
 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
@@ -44,27 +42,31 @@
                 </div>
                 <div class="Profile-Information">
                     <div class="information-content">
-                        <h4>Kişisel Bilgiler</h4>
-                        <form method="post" enctype="multipart/form-data" class="form">
-                            <div class="form-group">
-                                <label>İsim - Soyisim</label>
-                                <span asp-validation-for="FullName" class="text-danger"></span>
-                                <input type="text" asp-for="FullName" class="form-control col-sm-3" id="Name">
+                        <h4>Şifre Değiştirme</h4>
+                        <form class="security-form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Mail" />
+                            <input type="hidden" asp-for="Phone" />
+                            <input type="hidden" asp-for="FullName" />
+
+                            <div class="form-group col-sm-4">
+                                <label>Mevcut Şifre</label>
+                                <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                                <input type="password" asp-for="CurrentPassword" class="form-control form-control-lg" name="CurrentPassword">
                             </div>
-                            <div class="form-group">
-                                <label>Mail</label>
-                                <span asp-validation-for="Mail" class="text-danger"></span>
-                                <input type="email" asp-for="Mail" class="form-control col-sm-3" id="Mail">
+                            <div class="form-group col-sm-4">
+                                <label>Yeni Şifre</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <input type="password" asp-for="Password" class="form-control form-control-lg" name="Password">
                             </div>
-                            <div class="form-group">
-                                <label>Telefon No</label>
-                                <span asp-validation-for="Phone" class="text-danger"></span>
-                                <input type="text" asp-for="Phone" class="form-control col-sm-3" id="Phone">
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary">Güncelle</button>
+                            <div class="form-group col-sm-4">
+                                <label>Şifreyi Doğrulayın</label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                <input type="password" asp-for="ConfirmPassword" class="form-control form-control-lg" name="ConfirmPassword">
                             </div>
                             <div class="text-danger" asp-validation-summary="ModelOnly">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">Şifreyi Değiştir</button>
                             </div>
                         </form>
                     </div>

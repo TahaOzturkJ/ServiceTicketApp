@@ -12,7 +12,7 @@ namespace Project.UI.Areas.Auth.Controllers
         {
             if (errCode == "500" || errCode == "404" || errCode == "403")
             {
-                return View($"/Auth/Error/{errCode}.cshtml");
+                return View($"/Error/{errCode}");
             }
 
             return View();

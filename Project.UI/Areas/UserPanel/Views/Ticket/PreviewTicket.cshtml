@@ -68,14 +68,14 @@
                     </div>
 
                 </div>
-                <div class="col-md-3">
-                    <div class="col-sm-auto">
-                        <div class="image-input">
-                            <div class="images">
-                                @if (Model.ServiceTicketImages != null)
-                                {
-                                    @foreach (var item in Model.ServiceTicketImages)
-                                    {
+                @if (Model.ServiceTicketImages != null)
+                {
+                    @foreach (var item in Model.ServiceTicketImages)
+                    {
+                        <div class="col-md-3">
+                            <div class="col-sm-auto">
+                                <div class="image-input">
+                                    <div class="images">
                                         <div class="image">
                                             <a href="#" data-toggle="modal" data-target="#imageModal_@item.ID">
                                                 <img src="@item.ImageUrl">
@@ -98,12 +98,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                }
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                }
             </div>
             <div class="row">
                 <div class="col-md-12">

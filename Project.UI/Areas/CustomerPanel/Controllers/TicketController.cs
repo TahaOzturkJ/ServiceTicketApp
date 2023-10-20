@@ -149,14 +149,19 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
@@ -220,14 +225,19 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
@@ -300,17 +310,22 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                         var resource = Directory.GetCurrentDirectory();
                         var extension = Path.GetExtension(item.FileName);
                         var imagename = Guid.NewGuid() + extension;
-                        var savelocation = resource + "/wwwroot/TicketImage/" + imagename;
+                        var ticketImageDirectory = "TicketImage";
+                        var savelocation = Path.Combine(resource, ticketImageDirectory, imagename);
+
+                        // Ensure the directory exists, create it if it doesn't
+                        Directory.CreateDirectory(Path.Combine(resource, ticketImageDirectory));
+
                         var stream = new FileStream(savelocation, FileMode.Create);
                         await item.CopyToAsync(stream);
 
-                        ServiceTicketCommentImage stci = new ServiceTicketCommentImage
+                        ServiceTicketImage sti = new ServiceTicketImage
                         {
-                            ServiceTicketCommentID = stVM.ServiceTicketComment.ID,
-                            ImageUrl = "/TicketImage/" + imagename
+                            ServiceTicketID = stVM.ServiceTicket.ID,
+                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
                         };
 
-                        _stciRep.Add(stci);
+                        _stiRep.Add(sti);
                     }
                 }
 
@@ -338,6 +353,8 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                 List<string> ticketAssigned = new List<string>();
 
                 List<MemoryStream> pdfStreams = new List<MemoryStream>();
+
+                MemoryStream pdfStream = new MemoryStream();
 
                 foreach (var id in checkboxes)
                 {
@@ -769,16 +786,15 @@ textarea{
 
                         PdfDocument doc = converter.ConvertHtmlString(htmlContent);
 
-                        MemoryStream ms = new MemoryStream();
-                        doc.Save(ms);
+                        doc.Save(pdfStream);
                         doc.Close();
 
-                        ms.Position = 0;
-
-                        pdfStreams.Add(ms);
+                        pdfStream.Position = 0;
 
                         userNamesString = null;
                         ticketAssigned.Clear();
+
+                        pdfStreams.Add(pdfStream);
                     }
                     else
                     {
@@ -1193,40 +1209,17 @@ textarea{
 
                         PdfDocument doc = converter.ConvertHtmlString(htmlContent);
 
-                        MemoryStream ms = new MemoryStream();
-                        doc.Save(ms);
+                        doc.Save(pdfStream);
                         doc.Close();
 
-                        ms.Position = 0;
+                        // Set the position to the beginning of the stream
+                        pdfStream.Position = 0;
 
-                        pdfStreams.Add(ms);
+                        // Return the PDF file as a response
+                        pdfStreams.Add(pdfStream);
                     }
-                }
 
-                if (pdfStreams.Any())
-                {
-                    using (MemoryStream zipStream = new MemoryStream())
-                    {
-                        using (ZipArchive zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
-                        {
-                            for (int i = 0; i < pdfStreams.Count; i++)
-                            {
-                                var pdfStream = pdfStreams[i];
-                                var entry = zipArchive.CreateEntry($"ticket_{i + 1}.pdf");
-
-                                using (var entryStream = entry.Open())
-                                {
-                                    pdfStream.CopyTo(entryStream);
-                                }
-
-                                pdfStream.Close();
-                                pdfStream.Dispose();
-                            }
-                        }
-
-                        zipStream.Position = 0;
-                        return File(zipStream.ToArray(), "application/zip", "tickets.zip");
-                    }
+                    return File(pdfStream.ToArray(), "application/pdf", $"TicketID:{ticketId}.pdf");
                 }
             }
             else

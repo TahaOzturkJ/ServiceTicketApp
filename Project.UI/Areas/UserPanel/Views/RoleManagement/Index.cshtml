@@ -104,18 +104,24 @@
     function changeUserRole(userId, roleName) {
         $.post("/UserPanel/RoleManagement/ChangeRole", { userId: userId, roleName: roleName })
             .done(function (data) {
-                // Success: Display a toast message
-                toastr.success(data.message, "Başarılı!");
-                // Refresh the page after a short delay (e.g., 1 second)
-                setTimeout(function () {
-                    location.reload();
-                }, 1000); // Adjust the delay as needed
+                if (data.success) {
+                    // Success: Display a success message
+                    toastr.success(data.message, "Başarılı!");
+                    // Refresh the page after a short delay (e.g., 1 second)
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500); // Adjust the delay as needed
+                } else {
+                    // Error: Display an error message if the role change fails
+                    toastr.error(data.message, "Başarısız!");
+                }
             })
             .fail(function (error) {
-                // Error: Display an error message if the role change fails
-                toastr.error("Kullanıcının rolünü güncellerken bir hata oluştu", "Başarısız!");
+                // Error: Display an error message if the request fails
+                toastr.error("İstek başarısız oldu. Kullanıcının rolünü güncellerken bir hata oluştu", "Başarısız!");
             });
     }
+
 </script>
 
 

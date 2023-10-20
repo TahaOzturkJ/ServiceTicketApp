@@ -1,6 +1,7 @@
 ﻿@using Project.ENTITY.Models
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Project.BLL.Helpers
 @model List<ServiceTicket>
 
 @{
@@ -150,7 +151,7 @@
                             <th onclick="sortTable(3)">
                                 <div>
 
-                                    <b>Talebi Açan Personel</b>
+                                    <b>Şirket Temsilcisi</b>
                                     <div class="sort-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-up" width="16" height="16" viewBox="0 -5 24 24" stroke-width="0" stroke="#2c3e50" fill="#00abfb" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -242,14 +243,43 @@
                                     </div>
                                 </td>
                                 <td>@item.ID</td>
-                                <td><b>@item.User.Company.CompanyName</b></td>
+                                @if (item.User != null)
+                                {
+                                    <td><b>@item.User.Company.CompanyName</b></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
                                 <td class="limited-text">@item.Task</td>
-                                <td><img src="@item.User.ImageUrl" /> @item.User.FullName</td>
-                                <td>
-                                    @foreach (var ust in ViewBag.UserData[item.ID])
-                                    {
-                                        <img src="@ust.ImageUrl" />
-                                    }
+                                @if (item.User != null)
+                                {
+                                    <td><img src="@item.User.ImageUrl" /> @item.User.FullName</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                <td class="user-row-images">
+                                       @foreach (var ust in ViewBag.UserData[item.ID])
+                                   {
+                                       string fullname = ust.FullName;
+
+                                       @if (ust.ImageUrl != null)
+                                       {
+                                          <div class="user-image-sm">
+                                                <img src="@ust.ImageUrl">
+                                          </div>
+                                       }
+                                       else
+                                       {
+                                          <div class="user-image-sm">
+                                                <div class="user-image-text-sm">
+                                                    @Html.GetInitials(fullname)
+                                                </div>
+                                          </div>
+                                       }
+                                   }
                                 </td>
                                 @if (item.StartDate != null)
                                 {

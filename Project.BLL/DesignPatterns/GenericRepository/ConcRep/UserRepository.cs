@@ -109,5 +109,10 @@ namespace Project.BLL.DesignPatterns.GenericRepository.ConcRep
             }
             Save();
         }
+
+        public void DetachEntity(User entity)
+        {
+            _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+        }
     }
 }

@@ -11351,6 +11351,11 @@ pre {
         border: 0;
     }
 
+.security-form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .form-control, .asColorPicker-input, .dataTables_wrapper select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=text],
 .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead,
 .tt-query,
@@ -11546,6 +11551,23 @@ textarea.tt-hint {
 
 .form-group {
     margin-bottom: 1rem;
+}
+
+.customer-section{
+    position:relative;
+    border:1px solid #c3c3c3;
+    border-radius:20px;
+    padding-top:15px;
+    padding-bottom:10px;
+    margin-left:1px;
+    margin-right:1px;
+}
+
+.customer-section-name {
+    position: absolute;
+    top:-12px;
+    left:25px;
+    color: #808080;
 }
 
 .form-text {
@@ -13155,6 +13177,16 @@ input[type="button"].btn-block {
         border-top: 1px solid #cbcbcb;
     }
 
+.user-row-images{
+    display:flex;
+    flex-direction:row;
+    border-top:none !important;
+}
+
+.user-row-images > .user-image-sm{
+    margin-left:5px;
+}
+
 .user {
     display: flex;
 }
@@ -13162,6 +13194,7 @@ input[type="button"].btn-block {
 .user-image {
     display: flex;
     justify-content: center;
+    align-items:center;
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -13170,16 +13203,36 @@ input[type="button"].btn-block {
 }
 
 .user-image-text {
-    align-self: center;
     color: #515151;
     font-weight: 400;
     font-size: 16px;
 }
 
 .user-image > img {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 8rem;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+}
+
+.user-image-sm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #c7c7c7;
+    border: 1px solid #b0b0b0;
+}
+
+.user-image-sm > img {
+    width: 2rem !important;
+    height: 2rem !important;
+}
+
+.user-image-text-sm {
+    color: #515151;
+    font-weight: 400;
+    font-size: 14px;
 }
 
 .user-fullname {

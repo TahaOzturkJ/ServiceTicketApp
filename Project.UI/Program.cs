@@ -22,7 +22,7 @@ builder.Services.AddSession();
 builder.Services.AddDbContext<MyContext>();
 
 builder.Services.AddIdentity<User, Project.ENTITY.Models.IdentityRole>()
-    .AddEntityFrameworkStores<MyContext>();
+    .AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews()
     .AddNToastNotifyToastr(new ToastrOptions
@@ -67,8 +67,6 @@ if (!app.Environment.IsDevelopment())
 app.UseNToastNotify();
 
 app.UseStatusCodePagesWithRedirects("/Auth/Error/{0}");
-app.UseStatusCodePagesWithReExecute("/Auth/Error", "?statusCode={0}");
-app.UseStatusCodePagesWithReExecute("/Auth/Error/{0}");
 
 app.UseHttpsRedirection();
 

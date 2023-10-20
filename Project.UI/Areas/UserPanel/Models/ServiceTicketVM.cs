@@ -8,7 +8,7 @@ namespace Project.UI.Areas.UserPanel.Models
 
         public ServiceTicket? ServiceTicket { get; set; }
 
-        public IFormFile[] Image { get; set; }
+        public IFormFile[]? Image { get; set; }
 
         public List<ServiceTicketComment>? ServiceTicketComments { get; set; }
 

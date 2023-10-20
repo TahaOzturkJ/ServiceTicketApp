@@ -6,9 +6,6 @@
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
 <div class="col-12 grid-margin">
     <div class="card">
@@ -24,22 +21,49 @@
                                 <input type="text" class="form-control" asp-for="ServiceTicket.Task" />
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row customer-section">
+                            <div class="customer-section-name">
+                                Müşteri Bilgileri
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.PersonInNeedName">Adı - Soyadı</label>
+                                <span asp-validation-for="ServiceTicket.PersonInNeedName" class="text-danger validation-summary-errors"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.PersonInNeedName" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.PersonInNeedMail">Mail Adresi</label>
+                                <span asp-validation-for="ServiceTicket.PersonInNeedMail" class="text-danger validation-summary-errors"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.PersonInNeedMail" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label">Şirket</label>
+                                <div class="col-sm-12">
+                                    <select id="companyName" class="form-control" name="companyName" asp-items="ViewBag.Companies">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+@*                        <div class="form-group row">
                             <label class="col-sm-12 col-form-label">Destek İsteyen Personel</label>
                             <span asp-validation-for="ServiceTicket.CreatedByID" class="text-danger validation-summary-errors"></span>
                             <div class="col-sm-12">
-                                <select id="createdById" class="form-control js-example-tags" asp-for="ServiceTicket.CreatedByID" asp-items="ViewBag.OtherUsers">
+                                <select id="createdById" class="form-control" asp-for="ServiceTicket.CreatedByID" asp-items="ViewBag.OtherUsers">
                                     <option></option>
                                 </select>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group row">
                             <label class="col-sm-12 col-form-label">Açıklama</label>
                             <span asp-validation-for="ServiceTicket.Description" class="text-danger validation-summary-errors"></span>
                             <div class="col-sm-12">
-                                <textarea class="form-control" asp-for="ServiceTicket.Description" rows="7" cols="3"></textarea>
+                                <textarea class="form-control" asp-for="ServiceTicket.Description" rows="9" cols="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -119,28 +143,7 @@
 <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
 
 <script>
-    $(".js-example-tags").select2({
-        tags: true
-    });
-
     new MultiSelectTag('UserIds', {
         placeholder: 'Ara'
     })  // id
-
-    // Get the file input element
-    const fileInput = document.getElementById('fileInput');
-    // Get the label element
-    const label = document.querySelector('.custom-file-label');
-
-    // Add event listener for file selection
-    fileInput.addEventListener('change', function (e) {
-        // Get the list of selected files
-        const fileList = Array.from(e.target.files);
-
-        // Create an array to store the names of the selected files
-        const fileNames = fileList.map(file => file.name);
-
-        // Update the label's text with the list of selected file names
-        label.textContent = fileNames.join(', ');
-    });
 </script>

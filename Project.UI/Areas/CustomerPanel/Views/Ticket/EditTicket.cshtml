@@ -34,7 +34,6 @@
                                 <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
                                 <div class="col-sm-12">
                                     <select class="form-control" asp-for="ServiceTicket.TaskPriority" asp-items="@Html.GetEnumSelectList<Project.ENTITY.Enums.Priority>()">
-                                        <option selected="selected" value="">Öncelik</option>
                                     </select>
                                 </div>
                             </div>

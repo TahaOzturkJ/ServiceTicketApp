@@ -13,7 +13,8 @@
             <h4 class="card-title">Servis Bileti Düzenleme Paneli</h4>
             <form class="form-sample" method="post" enctype="multipart/form-data">
 
-                <input asp-for="ServiceTicket.ID" style="display:none;" />
+                <input type="hidden" asp-for="ServiceTicket.ID" />
+                <input type="hidden" asp-for="ServiceTicket.CreatedByID" />
 
                 <div class="row">
                     <div class="col-md-6">
@@ -24,7 +25,33 @@
                                 <input type="text" class="form-control" asp-for="ServiceTicket.Task" />
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row customer-section">
+                            <div class="customer-section-name">
+                                Müşteri Bilgileri
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.PersonInNeedName">Adı - Soyadı</label>
+                                <span asp-validation-for="ServiceTicket.PersonInNeedName" class="text-danger validation-summary-errors"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.PersonInNeedName" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label" asp-for="ServiceTicket.PersonInNeedMail">Mail Adresi</label>
+                                <span asp-validation-for="ServiceTicket.PersonInNeedMail" class="text-danger validation-summary-errors"></span>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" asp-for="ServiceTicket.PersonInNeedMail" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="col-sm-12 col-form-label">Şirket</label>
+                                <div class="col-sm-12">
+                                    <select id="companyName" class="form-control" name="companyName" asp-items="ViewBag.Companies">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+@*                        <div class="form-group row">
                             <label class="col-sm-12 col-form-label">Destek İsteyen Personel</label>
                             <span asp-validation-for="ServiceTicket.CreatedByID" class="text-danger"></span>
                             <div class="col-sm-12">
@@ -32,7 +59,7 @@
                                     <option></option>
                                 </select>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group row">
@@ -50,7 +77,6 @@
                                 <span asp-validation-for="ServiceTicket.TaskPriority" class="text-danger"></span>
                                 <div class="col-sm-12">
                                     <select class="form-control" asp-for="ServiceTicket.TaskPriority" asp-items="@Html.GetEnumSelectList<Project.ENTITY.Enums.Priority>()">
-                                        <option selected="selected" value="">Öncelik</option>
                                     </select>
                                 </div>
                             </div>
@@ -59,7 +85,6 @@
                                 <span asp-validation-for="ServiceTicket.TaskStatus" class="text-danger"></span>
                                 <div class="col-sm-12">
                                     <select class="form-control" asp-for="ServiceTicket.TaskStatus" asp-items="@Html.GetEnumSelectList<Project.ENTITY.Enums.TaskStatus>()">
-                                        <option selected="selected" value="">Durum</option>
                                     </select>
                                 </div>
                             </div>

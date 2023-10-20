@@ -13,6 +13,8 @@ namespace Project.ENTITY.Models
     {
         public string Task { get; set; }
         public string Description { get; set; }
+        public string? PersonInNeedName { get; set; }
+        public string? PersonInNeedMail { get; set; }
         public Priority TaskPriority { get; set; }
         public Enums.TaskStatus TaskStatus { get; set; }
         public DateTime? StartDate { get; set; }

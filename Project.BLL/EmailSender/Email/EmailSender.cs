@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Project.ENTITY.Models;
 
 namespace Project.BLL.EmailSender.Email
 {
@@ -13,19 +14,22 @@ namespace Project.BLL.EmailSender.Email
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            var client = new SmtpClient("smtp.office365.com", 587)
+            var client = new SmtpClient("smtp.gmail.com", 587)
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("mail", "şifre")
+                Credentials = new NetworkCredential("mail", "password")
             };
 
-            return client.SendMailAsync(
-                new MailMessage(from: "mail",
-                                to: email,
-                                subject,
-                                message
-                                ));
+            var mailMessage = new MailMessage(from: "mail", to: email)
+            {
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
+
+            return client.SendMailAsync(mailMessage);
         }
+
     }
 }

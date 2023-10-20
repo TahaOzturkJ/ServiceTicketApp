@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
+using NToastNotify;
 using Project.BLL.DesignPatterns.GenericRepository.ConcRep;
+using Project.BLL.EmailSender.Email;
+using Project.BLL.EmailSender.IEmail;
 using Project.ENTITY.Models;
 using Project.UI.Areas.Auth.Models;
 
@@ -21,38 +25,18 @@ namespace Project.UI.Areas.Auth.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
-            var Companies = new SelectList(_cRep.GetActives(), "ID", "CompanyName");
-
-            if (Companies != null)
-            {
-                ViewBag.Companies = Companies;
-            }
-
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(UserRegisterViewModel urvm)
+        public async Task<IActionResult> Index(UserRegisterViewModel urvm, [FromServices] IToastNotification toast)
         {
 
             if (ModelState.IsValid)
             {
                 User u = new User();
-
-                if (urvm.Image != null && Path.GetExtension(urvm.Image.FileName) != ".svg")
-                {
-                    var resource = Directory.GetCurrentDirectory();
-                    var extension = Path.GetExtension(urvm.Image.FileName);
-                    var imagename = Guid.NewGuid() + extension;
-                    var savelocation = resource + "/wwwroot/UserImage/" + imagename;
-                    var stream = new FileStream(savelocation, FileMode.Create);
-                    await urvm.Image.CopyToAsync(stream);
-                    u.ImageUrl = "/UserImage/" + imagename;
-                }
-
 
                 u.FullName = urvm.FullName;
                 u.Email = urvm.Mail;
@@ -64,34 +48,42 @@ namespace Project.UI.Areas.Auth.Controllers
 
                 var companies = _cRep.GetActives();
                 var matchedCompany = companies.FirstOrDefault(x => x.CompanyName.Replace(" ", "").ToUpperInvariant() == domain);
+
                 if (matchedCompany != null)
                 {
                     u.CompanyID = matchedCompany.ID;
+
+                    if (urvm.ConfirmPassword == urvm.Password)
+                    {
+                        var result = await _userManager.CreateAsync(u, urvm.Password);
+
+                        if (result.Succeeded)
+                        {
+                            toast.AddSuccessToastMessage("Kullanıcı Oluşturuldu!.", new ToastrOptions { Title = "Başarılı!" });
+                            return RedirectToAction("Index", "Login", "Auth");
+                        }
+                        else
+                        {
+                            foreach (var item in result.Errors)
+                            {
+                                ModelState.AddModelError("", item.Description);
+                            }
+                            return View();
+                        }
+                    }
                 }
                 else {
+
                     ModelState.AddModelError("", "Maalesef size hizmet verememekteyiz");
+
                 }
 
-                if (urvm.ConfirmPassword == urvm.Password)
-                {
-                    var result = await _userManager.CreateAsync(u, urvm.Password);
-
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Login", "Auth");
-                    }
-                    else
-                    {
-                        foreach (var item in result.Errors)
-                        {
-                            ModelState.AddModelError("", item.Description);
-                        }
-                        return View();
-                    }
-                }
                 return View();
+
             }
+
             return View();
+
         }
     }
 }
