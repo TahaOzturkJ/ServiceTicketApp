@@ -6,12 +6,12 @@ using IdentityRole = Project.ENTITY.Models.IdentityRole;
 
 namespace Project.DAL.Context
 {
-    public class MyContext : IdentityDbContext<User, ENTITY.Models.IdentityRole, int>
+    public class MyContext : IdentityDbContext<User, IdentityRole, int>
     {
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=BBSUygulamaDb;integrated security=true;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=192.168.168.16;Database=BBSUygulamaDb;User Id=sa;Password=Pass**/1;TrustServerCertificate=true;");
         }
 
 
