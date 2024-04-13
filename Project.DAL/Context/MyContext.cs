@@ -11,7 +11,7 @@ namespace Project.DAL.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=192.168.168.16;Database=BBSUygulamaDb;User Id=sa;Password=Pass**/1;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=.;Database=BBSUygulamaDb;Integrated Security=true;TrustServerCertificate=true");
         }
 
 

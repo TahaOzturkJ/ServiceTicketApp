@@ -263,7 +263,16 @@ namespace Project.UI.Areas.UserPanel.Controllers
 
                 var subject = $"Oluşturmuş olduğunuz {stVM.ServiceTicket.Task} isimli servis bileti hakkında";
 
-                var message = $"Sayın {stVM.ServiceTicket.PersonInNeedName} belirtmiş olduğunuz {stVM.ServiceTicket.Description} açıklamalı sorun tarafımıza iletilmiştir, en kısa sürede destek verilecektir.";
+                var message = "";
+
+                if (stVM.ServiceTicket.TaskStatus == ENTITY.Enums.TaskStatus.Tamamlandı)
+                {
+                    message = $"Sayın {stVM.ServiceTicket.PersonInNeedName} belirtmiş olduğunuz {stVM.ServiceTicket.Description} açıklamalı sorun çözülmüştür.";
+                }
+                else
+                {
+                    message = $"Sayın {stVM.ServiceTicket.PersonInNeedName} belirtmiş olduğunuz {stVM.ServiceTicket.Description} açıklamalı sorun tarafımıza iletilmiştir, en kısa sürede destek verilecektir.";
+                }
 
                 var selectedCompany = _cRep.FirstOrDefault(x => x.CompanyName == companyName);
 
@@ -641,9 +650,9 @@ namespace Project.UI.Areas.UserPanel.Controllers
                     item.CompletionDate = DateTime.Now;
                     _stRep.Update(item);
 
-                    var person = _uRep.Find(Convert.ToInt32(item.CreatedByID));
+                    //var person = _uRep.Find(Convert.ToInt32(item.CreatedByID));
 
-                    var receiver = person.Email;
+                    var receiver = item.PersonInNeedMail;
 
                     var subject = "Oluşturmuş olduğunuz " + item.ID + " numaralı " + item.Task + " İsimli Servis Bileti Hakkında";
 
