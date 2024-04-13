@@ -32,9 +32,18 @@
                 <h4>Profilim</h4>
                 <div class="Profile-Content">
                     <div class="user-image profile-image">
-                        <div class="user-image-text">
-                            @Html.GetInitials(Model.FullName)
-                        </div>
+                        @if (File.Exists(Model.ImageUrl))
+                        {
+                            <div class="user-image-text">
+                                @Model.ImageUrl
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="user-image-text">
+                                @Html.GetInitials(Model.FullName)
+                            </div>
+                        }
                     </div>
                     <div class="user-info">
                         <div class="user-fullname">

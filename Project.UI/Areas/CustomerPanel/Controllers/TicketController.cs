@@ -161,7 +161,7 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
+                            ImageUrl = $"{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
@@ -237,7 +237,7 @@ namespace Project.UI.Areas.CustomerPanel.Controllers
                         ServiceTicketImage sti = new ServiceTicketImage
                         {
                             ServiceTicketID = stVM.ServiceTicket.ID,
-                            ImageUrl = $"/{ticketImageDirectory}/{imagename}"
+                            ImageUrl = $"{ticketImageDirectory}/{imagename}"
                         };
 
                         _stiRep.Add(sti);
