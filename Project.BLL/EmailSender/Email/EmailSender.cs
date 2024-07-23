@@ -18,10 +18,10 @@ namespace Project.BLL.EmailSender.Email
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("teknik@bbsyazilim.com", "2019Ecrin1982*")
+                Credentials = new NetworkCredential("mail", "password")
             };
 
-            var mailMessage = new MailMessage(from: "teknik@bbsyazilim.com", to: email)
+            var mailMessage = new MailMessage(from: "mail", to: email)
             {
                 Subject = subject,
                 Body = message,
